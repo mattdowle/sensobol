@@ -1,0 +1,28 @@
+Package: sensobol
+Title: Computation of Sobol' sensitivity indices
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Arnald",
+           family = "Puy",
+           role = c("aut", "cre"),
+           email = "arnald.puy@gmail.com")
+Description: Computes Sobol' first, second, third and total-order effects using
+    the estimators by Saltelli et al. 2010 and Jansen 1999. It relies
+    on parallel computing.
+License: GPL-3
+Encoding: UTF-8
+Imports:
+    boot (>= 1.3.20),
+    data.table (>= 1.12.0),
+    doParallel (>= 1.0.14),
+    ggplot2 (>= 3.1.0),
+    magrittr,
+    parallel (>= 3.5.2),
+    randtoolbox (>= 1.17.1),
+    stats,
+    stringr (>= 1.4.0),
+    utils (>= 3.5.2)
+LazyData: true
+Depends: R (>= 3.4.0)
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1
