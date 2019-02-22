@@ -433,14 +433,13 @@ sobol_indices <- function(Y, params, type = "jansen",
     # Extract the second parameter
     second <- sub(".*\\.", "", paramet)
     # Extract the AB vector of the first parameter
-    Y_ABi <- out[.(first), allow.cartesian = TRUE] %>%
+    Y_ABi <- out[list(first), allow.cartesian = TRUE] %>%
       .[, Y_AB]
     # Extract the AB vector of the second parameter
-    Y_ABj <- out[.(second), allow.cartesian = TRUE] %>%
+    Y_ABj <- out[list(second), allow.cartesian = TRUE] %>%
       .[, Y_AB]
     # Merge with the AB matrix of the second order
-    out2[, Y_ABi:= cbind(Y_ABi)] %>%
-      .[, Y_ABj:= cbind(Y_ABj)]
+    out2[, Y_ABi:= cbind(Y_ABi)][, Y_ABj:= cbind(Y_ABj)]
     # Remove rows with NA
     out3 <- out2 %>%
       na.omit()
@@ -488,23 +487,17 @@ sobol_indices <- function(Y, params, type = "jansen",
                 stringr::word(paramet3, 3, sep = stringr::fixed(".")),
                 sep = ".")
     # Extract the AB vector of the first parameter
-    Y_ABi <- out[.(first), allow.cartesian = TRUE] %>%
-      .[, Y_AB]
+    Y_ABi <- out[list(first), allow.cartesian = TRUE][, Y_AB]
     # Extract the AB vector of the second parameter
-    Y_ABj <- out[.(second), allow.cartesian = TRUE] %>%
-      .[, Y_AB]
+    Y_ABj <- out[list(second), allow.cartesian = TRUE][, Y_AB]
     # Extract the AB vector of the third parameter
-    Y_ABk <- out[.(third), allow.cartesian = TRUE] %>%
-      .[, Y_AB]
+    Y_ABk <- out[list(third), allow.cartesian = TRUE][, Y_AB]
     # Extract the AB vector of the ij
-    Y_ABij <- out2[.(ij), allow.cartesian = TRUE] %>%
-      .[, Y_ABij]
+    Y_ABij <- out2[list(ij), allow.cartesian = TRUE][, Y_ABij]
     # Extract the AB vector of the jk
-    Y_ABjk <- out2[.(jk), allow.cartesian = TRUE] %>%
-      .[, Y_ABij]
+    Y_ABjk <- out2[list(jk), allow.cartesian = TRUE][, Y_ABij]
     # Extract the AB vector of the ik
-    Y_ABik <- out2[.(ik), allow.cartesian = TRUE] %>%
-      .[, Y_ABij]
+    Y_ABik <- out2[list(ik), allow.cartesian = TRUE][, Y_ABij]
     # Merge with the AB matrix of the second order
     out4[, Y_ABi:= cbind(Y_ABi)] %>%
       .[, Y_ABj:= cbind(Y_ABj)] %>%
