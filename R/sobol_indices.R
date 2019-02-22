@@ -360,7 +360,7 @@ sobol_third_MapplyS <- function(d, i)
 #' @return A data.table object.
 #' @export
 #' @examples
-#' n <- 5000; k <- 8; R <- 10
+#' n <- 100; k <- 8; R <- 10
 #' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
 #' Y <- sobol.Fun(A)
 #' sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
@@ -390,7 +390,7 @@ sobol_indices <- function(Y, params, type = "jansen",
   out <- data.table::data.table(vec, parameters)
   out.1 <- out %>%
     # remove rows with NA
-    na.omit(.)
+    na.omit()
   # Check which estimator to use for First-order indices
   if(type == "jansen") {
     Estimator1 <- sobol_MapplyJ
@@ -443,7 +443,7 @@ sobol_indices <- function(Y, params, type = "jansen",
       .[, Y_ABj:= cbind(Y_ABj)]
     # Remove rows with NA
     out3 <- out2 %>%
-      na.omit(.)
+      na.omit()
     # Bootstrap second-order indices
     Sij <- out3[, list(list(boot::boot(.SD,
                                        Estimator2,
@@ -514,7 +514,7 @@ sobol_indices <- function(Y, params, type = "jansen",
       .[, Y_ABik:= cbind(Y_ABik)]
     # Remove rows with NA
     out5 <- out4 %>%
-      na.omit(.)
+      na.omit()
     # Bootstrap third-order indices
     Sijk <- out5[, list(list(boot::boot(.SD,
                                         Estimator3,

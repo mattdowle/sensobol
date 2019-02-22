@@ -32,7 +32,7 @@ A data table.
 Computes bootstrap confidence intervals for Sobol' indices
 }
 \examples{
-n <- 5000; k <- 8; R <- 10
+n <- 100; k <- 8; R <- 10
 A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
 Y <- sobol.Fun(A)
 sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),

@@ -7,6 +7,7 @@ vignette: >
   %\VignetteIndexEntry{sensobol}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: /Users/arnald/Documents/arnald/bibtex/LATEX_density.bib
 ---
 
 ```{r setup, include = FALSE}
@@ -17,7 +18,7 @@ knitr::opts_chunk$set(
 ```
 
 
-After loading the package, we create a Sobol' matrix to compute first, second and third-order Sobol' indices. To that end, we set `second = TRUE` and `third = TRUE. We then use the Sobol' G function as a function test to get the model output *Y*.
+After loading the package, we create a Sobol' matrix to compute first, second and third-order Sobol' indices. To that end, we set `second = TRUE` and `third = TRUE`. We then use the Sobol' G function as a function test to get the model output *Y*.
 
 ```{r creation_matrix}
 library(sensobol)
@@ -70,7 +71,7 @@ dt.ci <- sobol_ci(dt,
                   third = TRUE) 
 ```
 
-To visualize the Sobol' indices, use the `plot_sobol` function with type = 1. For second and third-order indices, use type = 2 and type = 3 respectively. Smaller confidence intervals will
+To visualize the Sobol' indices, use the `plot_sobol` function with `type = 1`. For second and third-order indices, use `type = 2` and `type = 3` respectively. Narrower confidence intervals will
 be obtained by increasing the sample size *N*.
 
 ```{r plot_sobol_first, fig.height=3, fig.width=4}

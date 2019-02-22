@@ -119,14 +119,14 @@ create_vectors <- function(params, second = FALSE, third = FALSE) {
   parameters <- rep(params, each = 2)
   sensitivity <- rep(c("Si", "STi"), times = length(params))
   # Define for second only
-  parameters.second <- utils::combn(params, 2, simplify = FALSE) %>%
-    lapply(., function(x) paste0(x, collapse = ".")) %>%
+  pairs <- utils::combn(params, 2, simplify = FALSE)
+  parameters.second <- lapply(pairs, function(x) paste0(x, collapse = ".")) %>%
     unlist()
   sensitivity.second <- rep("Sij", times = (length(params) * (length(params) - 1) / 2))
   # Define for third only
   if(length(params) > 2) {
-    parameters.third <- utils::combn(params, 3, simplify = FALSE) %>%
-      lapply(., function(x) paste0(x, collapse = ".")) %>%
+    triplet <- utils::combn(params, 3, simplify = FALSE)
+    parameters.third <- lapply(triplet, function(x) paste0(x, collapse = ".")) %>%
       unlist()
     sensitivity.third <- rep("Sijk", times = factorial(length(params)) /
                                (factorial(3) * factorial((length(params) - 3))))
@@ -171,7 +171,7 @@ create_vectors <- function(params, second = FALSE, third = FALSE) {
 #' @export
 #'
 #' @examples
-#' n <- 5000; k <- 8; R <- 10
+#' n <- 100; k <- 8; R <- 10
 #' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
 #' Y <- sobol.Fun(A)
 #' sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),

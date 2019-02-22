@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' n <- 5000; k <- 8; R <- 10
+#' n <- 100; k <- 8; R <- 10
 #' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
 #' Y <- sobol.Fun(A)
 #' sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
@@ -29,7 +29,7 @@ plot_sobol <- function(x, type = 1) {
   if(type == 1) {
     p <- x[sensitivity == "Si" | sensitivity == "STi"]
     gg <- ggplot2::ggplot(p, aes(parameters, original,
-                                 sensitivity)) +
+                                 fill = sensitivity)) +
       geom_bar(stat = "identity",
                position = position_dodge(0.6),
                color = "black") +
@@ -101,13 +101,12 @@ plot_uncertainty <- function(Y) {
                    fill = "white") +
     labs(x = "Y",
          y = "Count") +
+    theme_bw() +
     theme(panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           legend.background = element_rect(fill = "transparent",
                                            color = NA),
           legend.key = element_rect(fill = "transparent",
-                                    color = NA),
-          axis.text.x = element_text(angle = 45,
-                                     hjust = 1))
+                                    color = NA))
   return(gg)
 }
