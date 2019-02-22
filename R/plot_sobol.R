@@ -16,7 +16,7 @@
 #' @examples
 #' n <- 100; k <- 8; R <- 10
 #' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
-#' Y <- sobol.Fun(A)
+#' Y <- sobol_Fun(A)
 #' sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
 #' R = R, n = n, parallel = "no", ncpus = 1,
 #' second = TRUE, third = TRUE)
@@ -92,7 +92,7 @@ plot_sobol <- function(x, type = 1) {
 #' @examples
 #' n <- 500; k <- 8
 #' A <- sobol_matrices(n = n, k = k)
-#' Y <- sobol.Fun(A)
+#' Y <- sobol_Fun(A)
 #' plot_uncertainty(Y)
 plot_uncertainty <- function(Y) {
   df <- data.frame(Y)

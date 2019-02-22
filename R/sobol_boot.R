@@ -173,7 +173,7 @@ create_vectors <- function(params, second = FALSE, third = FALSE) {
 #' @examples
 #' n <- 100; k <- 8; R <- 10
 #' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
-#' Y <- sobol.Fun(A)
+#' Y <- sobol_Fun(A)
 #' sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
 #' R = R, n = n, parallel = "no", ncpus = 1,
 #' second = TRUE, third = TRUE)

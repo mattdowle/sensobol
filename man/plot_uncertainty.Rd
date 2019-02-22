@@ -18,6 +18,6 @@ Plot model output uncertainty
 \examples{
 n <- 500; k <- 8
 A <- sobol_matrices(n = n, k = k)
-Y <- sobol.Fun(A)
+Y <- sobol_Fun(A)
 plot_uncertainty(Y)
 }

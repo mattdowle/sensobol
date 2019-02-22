@@ -37,7 +37,7 @@ A <- sobol_matrices(n = N,
                     third = TRUE)
 
 # Compute model output ------------------------------------
-Y <- sobol.Fun(A)
+Y <- sobol_Fun(A)
 ```
 
 We then compute and bootstrap Sobol' first, second, third and total sensitivity indices. There are two estimators available: the one by @Jansen1999 (default) and the one by @Saltelli2010a. The `sobol_indices` function also allows for parallel computing to speed up the bootstrapping. For more information on how to use the parallel and ncpus parameters, check the `boot` function of the `boot` package.
