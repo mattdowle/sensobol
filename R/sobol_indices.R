@@ -418,8 +418,8 @@ sobol_indices <- function(Y, params, type = "jansen",
                   ((n * (k + 2)) +
                      (n * factorial(k) / (factorial(2) * factorial(k - 2))))]
     # Create vector with pairs of parameters
-    paramet <- utils::combn(params, 2, simplify = FALSE) %>%
-      lapply(., function(x) paste0(x, collapse = ".")) %>%
+    paired <- utils::combn(params, 2, simplify = FALSE)
+    paramet<- lapply(paired, function(x) paste0(x, collapse = ".")) %>%
       unlist()
     parameters <- rep(paramet, each = length(Y_A))
     # create vectpr with Y_A, Y_B and Y_ABij
@@ -433,11 +433,9 @@ sobol_indices <- function(Y, params, type = "jansen",
     # Extract the second parameter
     second <- sub(".*\\.", "", paramet)
     # Extract the AB vector of the first parameter
-    Y_ABi <- out[list(first), allow.cartesian = TRUE] %>%
-      .[, Y_AB]
+    Y_ABi <- out[list(first), allow.cartesian = TRUE][, Y_AB]
     # Extract the AB vector of the second parameter
-    Y_ABj <- out[list(second), allow.cartesian = TRUE] %>%
-      .[, Y_AB]
+    Y_ABj <- out[list(second), allow.cartesian = TRUE][, Y_AB]
     # Merge with the AB matrix of the second order
     out2[, Y_ABi:= cbind(Y_ABi)][, Y_ABj:= cbind(Y_ABj)]
     # Remove rows with NA
@@ -460,8 +458,8 @@ sobol_indices <- function(Y, params, type = "jansen",
                                       (factorial(2) * factorial(k - 2))))+1):
                    length(Y)]
     # Create vector with pairs of parameters
-    paramet3 <- utils::combn(params, 3, simplify = FALSE) %>%
-      lapply(., function(x) paste0(x, collapse = ".")) %>%
+    triplet <- utils::combn(params, 3, simplify = FALSE)
+    paramet3 <- lapply(triplet, function(x) paste0(x, collapse = ".")) %>%
       unlist()
     parameters <- rep(paramet3, each = length(Y_A))
     # create vectpr with Y_A, Y_B and Y_ABijk
@@ -499,12 +497,17 @@ sobol_indices <- function(Y, params, type = "jansen",
     # Extract the AB vector of the ik
     Y_ABik <- out2[list(ik), allow.cartesian = TRUE][, Y_ABij]
     # Merge with the AB matrix of the second order
-    out4[, Y_ABi:= cbind(Y_ABi)] %>%
-      .[, Y_ABj:= cbind(Y_ABj)] %>%
-      .[, Y_ABk:= cbind(Y_ABk)] %>%
-      .[, Y_ABij:= cbind(Y_ABij)] %>%
-      .[, Y_ABjk:= cbind(Y_ABjk)] %>%
-      .[, Y_ABik:= cbind(Y_ABik)]
+    out4[, Y_ABi:= cbind(Y_ABi)][
+      , Y_ABj:= cbind(Y_ABj)
+      ][
+        , Y_ABk:= cbind(Y_ABk)
+      ][
+        , Y_ABij:= cbind(Y_ABij)
+      ][
+        , Y_ABjk:= cbind(Y_ABjk)
+      ][
+        , Y_ABik:= cbind(Y_ABik)
+      ]
     # Remove rows with NA
     out5 <- out4 %>%
       na.omit()
