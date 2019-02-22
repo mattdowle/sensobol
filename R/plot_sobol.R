@@ -81,6 +81,7 @@ plot_sobol <- function(x, type = 1) {
   return(gg)
 }
 
+# PLOT MODEL OUTPUT UNCERTAINTY -----------------------------------------------
 
 #' Plot model output uncertainty
 #'
@@ -103,6 +104,51 @@ plot_uncertainty <- function(Y) {
          y = "Count") +
     theme_bw() +
     theme(panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          legend.background = element_rect(fill = "transparent",
+                                           color = NA),
+          legend.key = element_rect(fill = "transparent",
+                                    color = NA))
+  return(gg)
+}
+
+# PLOT SCATTERPLOT OF MODEL OUTPUT VERSUS MODEL INPUTS ------------------------
+
+#' Scatterplots of model output versus the model inputs
+#'
+#' @param x a data table, data frame or matrix with the
+#' model inputs.
+#' @param Y Numeric vector with the model output.
+#' @param n Integer, sample size of the Sobol' matrix.
+#' @param params Vector with the name of the model inputs.
+#'
+#' @return A ggplot object.
+#' @export
+#'
+#' @examples
+#' n <- 100; k <- 8
+#' A <- sobol_matrices(n = n, k = k)
+#' Y <- sobol_Fun(A)
+#' plot_scatter(x = A, Y = Y, n = n, params = colnames(data.frame(A)))
+plot_scatter <- function(x, Y, n, params) {
+  value <- NULL
+  dt <- data.table::data.table(cbind(x, Y))
+  # Retrieve the A and B matrices only
+  dt <- dt[1:(2 * n)]
+  data.table::setnames(dt, 1:ncol(dt), paste(c(params, "Y")))
+  dt.melted <- data.table::melt(dt, measure.vars = 1:length(params),
+                                variable.name = "Parameters")
+  gg <- ggplot2::ggplot(dt.melted, aes(x = value, y = Y)) +
+    geom_hex() +
+    labs(x = "Value",
+         y = "Y") +
+    facet_wrap(~Parameters,
+               scales = "free_x") +
+    theme_bw() +
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 3)) +
+    scale_fill_continuous(name = "Count") +
+    theme(legend.position = "top",
+          panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           legend.background = element_rect(fill = "transparent",
                                            color = NA),

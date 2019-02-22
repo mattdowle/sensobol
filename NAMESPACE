@@ -2,6 +2,7 @@
 
 export("%>%")
 export(ishigami_Mapply)
+export(plot_scatter)
 export(plot_sobol)
 export(plot_uncertainty)
 export(scrambled_second)
