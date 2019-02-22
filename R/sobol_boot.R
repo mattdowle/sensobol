@@ -14,7 +14,6 @@
 #' @importFrom stats 'sd'
 #'
 #' @return An object of class boot
-#' @export
 bootstats <- function(b, conf = conf, type = type) {
   p <- length(b$t0)
   lab <- c("original", "bias", "std.error", "low.ci", "high.ci")
@@ -54,7 +53,7 @@ bootstats <- function(b, conf = conf, type = type) {
   return(out)
 }
 
-#' Computes bootstrap confidence intervals.
+#' Computes bootstrap confidence intervals
 #'
 #' @param b A boot object with the computed Sobol' indices.
 #' @param params A vector with the name of the model inputs.
@@ -70,43 +69,33 @@ bootstats <- function(b, conf = conf, type = type) {
 #' intervals for second-order indices. Default is third == FALSE.
 #'
 #' @return A data table.
-#' @export
-#'
-#' @examples
-#' n <- 5000; k <- 8; R <- 10
-#' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
-#' Y <- sobol.Fun(A)
-#' sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
-#' R = R, n = n, parallel = "no", ncpus = 1,
-#' second = TRUE, third = TRUE)
-#' sens.ci <- sobol_ci(sens, params = colnames(data.frame(A)),
-#' type = "norm", conf = 0.95, second = TRUE, third = TRUE)
-sobol_ci <- function(b, params, type, conf, second = FALSE, third = FALSE) {
+sobol_ci_temp <- function(b, params, type, conf, second = FALSE, third = FALSE) {
+  V1 <- NULL
   # Extract first and total order effects
-  Si.STi <- b[, .SD[1:length(params)]][, V1] %>%
-    lapply(., function(x) bootstats(x,
-                                    type = type,
-                                    conf = conf)) %>%
-    data.table::rbindlist(.)
+  ext1 <- b[, .SD[1:length(params)]][, V1]
+  Si.STi <- lapply(ext1, function(x) bootstats(x,
+                                               type = type,
+                                               conf = conf)) %>%
+    data.table::rbindlist()
   if(second == TRUE) {
     # Extract second order effects
-    Sij <- b[, .SD[(length(params) + 1) :(length(params) +
-                                            factorial(length(params)) /
-                               (factorial(2) * factorial(length(params) - 2)))]][, V1] %>%
-      lapply(., function(x) bootstats(x,
-                                      type = type,
-                                      conf = conf)) %>%
-      data.table::rbindlist(.)
+     ext2 <- b[, .SD[(length(params) + 1) :(length(params) +
+                                              factorial(length(params)) /
+                                              (factorial(2) * factorial(length(params) - 2)))]][, V1]
+     Sij <- lapply(ext2, function(x) bootstats(x,
+                                               type = type,
+                                               conf = conf)) %>%
+       data.table::rbindlist()
   } else {
     Sij <- NULL
   }
   if(third == TRUE) {
-    Sijk <- b[, utils::tail(.SD, factorial(length(params)) /
-                              (factorial(3) * factorial(length(params) - 3)))][, V1] %>%
-      lapply(., function(x) bootstats(x,
-                                      type = type,
-                                      conf = conf)) %>%
-      data.table::rbindlist(.)
+    ext3 <- b[, utils::tail(.SD, factorial(length(params)) /
+                              (factorial(3) * factorial(length(params) - 3)))][, V1]
+    Sijk <- lapply(ext3, function(x) bootstats(x,
+                                               type = type,
+                                               conf = conf)) %>%
+      data.table::rbindlist()
   } else {
     Sijk <- NULL
   }
@@ -125,20 +114,7 @@ sobol_ci <- function(b, params, type, conf, second = FALSE, third = FALSE) {
 #' intervals for second-order indices. Default is third == FALSE.
 #'
 #' @return A data table.
-#' @export
-#'
-#' @examples
-#' n <- 5000; k <- 8; R <- 10
-#' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
-#' Y <- sobol.Fun(A)
-#' sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
-#' R = R, n = n, parallel = "no", ncpus = 1,
-#' second = TRUE, third = TRUE)
-#' sens.ci <- sobol_ci(sens, params = colnames(data.frame(A)),
-#' type = "norm", conf = 0.95, second = TRUE, third = TRUE) %>%
-#' cbind(create.vectors(paste("X", 1:8, sep = ""), second = TRUE, third = TRUE))
-#'
-create.vectors <- function(params, second = FALSE, third = FALSE) {
+create_vectors <- function(params, second = FALSE, third = FALSE) {
   # Define for first and total only
   parameters <- rep(params, each = 2)
   sensitivity <- rep(c("Si", "STi"), times = length(params))
@@ -172,5 +148,40 @@ create.vectors <- function(params, second = FALSE, third = FALSE) {
     sensitivity <- c(sensitivity, sensitivity.second, sensitivity.third)
     out <- data.table::as.data.table(cbind(parameters, sensitivity))
   }
+  return(out)
+}
+
+#' Computes bootstrap confidence intervals for Sobol' indices
+#'
+#' @param b A boot object with the computed Sobol' indices.
+#' @param params A vector with the name of the model inputs.
+#' @param type A vector of character strings representing
+#' the type of intervals required. The value should be any subset
+#' of the values c('norm','basic', 'perc', 'bca'). For more information,
+#' check the function boot::boot.ci.
+#' @param conf A scalar or vector containing the confidence
+#' level(s) of the required interval(s).
+#' @param second Boolean. If second == TRUE, it computes the confidence
+#' intervals for second-order indices. Default is second == FALSE.
+#' @param third Boolean. If third == TRUE, it computes the confidence
+#' intervals for second-order indices. Default is third == FALSE.
+#'
+#' @return A data table.
+#'
+#' @export
+#'
+#' @examples
+#' n <- 5000; k <- 8; R <- 10
+#' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
+#' Y <- sobol.Fun(A)
+#' sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
+#' R = R, n = n, parallel = "no", ncpus = 1,
+#' second = TRUE, third = TRUE)
+#' sobol_ci(sens, params = colnames(data.frame(A)),
+#' type = "norm", conf = 0.95, second = TRUE, third = TRUE)
+sobol_ci <- function(b, params, type, conf, second = FALSE, third = FALSE) {
+  out <- sobol_ci_temp(b = b, params = params, type = type,
+                        conf = conf, second = second, third = third) %>%
+    cbind(create_vectors(params = params, second = second, third = third))
   return(out)
 }

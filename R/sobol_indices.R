@@ -331,7 +331,9 @@ sobol_third_MapplyS <- function(d, i)
 #'
 #' It computes and bootstraps up to third-order Sobol' indices
 #' using either the Saltelli et al. 2010 or the Jansen 1999
-#' estimator. It relies on parallel computing.
+#' estimator. The computation of third-order indices requires
+#' the computation of second-order indices first. The function
+#' relies on parallel computing.
 #'
 #' @param Y Numeric vector, model output.
 #' @param params Vector with the name of the model inputs.
@@ -353,6 +355,7 @@ sobol_third_MapplyS <- function(d, i)
 #' @param third Boolean. if third == "TRUE", it computes
 #' third-order Sobol' indices.
 #' @importFrom data.table ".SD"
+#' @importFrom rlang ":="
 #'
 #' @return A data.table object.
 #' @export
@@ -366,6 +369,10 @@ sobol_third_MapplyS <- function(d, i)
 sobol_indices <- function(Y, params, type = "jansen",
                           R, n, parallel = "no", ncpus = 1,
                           second = FALSE, third = FALSE) {
+  if(second == FALSE & third == TRUE) {
+    stop("The computation of third-order indices requires second == TRUE as it computes
+         second-order indices first")
+  }
   # Calculate the number of parameters
   k <- length(params)
   # Calculate the length of the A and B matrices

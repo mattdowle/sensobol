@@ -43,8 +43,8 @@ scrambled_second <- function(A, B) {
     AB[, c(i[[1]], i[[2]])] <- B[, c(i[[1]], i[[2]])]
     X <- rbind(X, AB)
   }
-  AB <- X %>%
-    .[(2 * nrow(A) + 1):nrow(.), ]
+  n <- nrow(X)
+  AB <- X[(2 * nrow(A) + 1):n, ]
   return(AB)
 }
 
@@ -68,9 +68,8 @@ scrambled_third <- function(A, B) {
     AB[, c(i[[1]], i[[2]], i[[3]])] <- B[, c(i[[1]], i[[2]], i[[3]])]
     X <- rbind(X, AB)
   }
-  AB <- X %>%
-    # Select only the scrambled matrix
-    .[(2 * nrow(A) + 1):nrow(.), ]
+  n <- nrow(X)
+  AB <- X[(2 * nrow(A) + 1):n, ]
   return(AB)
 }
 
@@ -109,8 +108,8 @@ sobol_matrices <- function(n, k, second = FALSE, third = FALSE) {
     AB <- rbind(AB, AB.2)
   }
   if(second == FALSE & third == TRUE) {
-    AB.3 <- scrambled_third(A = A, B = B)
-    AB <- rbind(AB, AB.3)
+    stop("The computation of third-order Sobol' indices
+         requires the computation of second-order indices first")
   }
   if(second == TRUE & third == TRUE) {
     AB.2 <- scrambled_second(A = A, B = B)

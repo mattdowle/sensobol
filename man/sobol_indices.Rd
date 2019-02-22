@@ -42,7 +42,9 @@ A data.table object.
 \description{
 It computes and bootstraps up to third-order Sobol' indices
 using either the Saltelli et al. 2010 or the Jansen 1999
-estimator. It relies on parallel computing.
+estimator. The computation of third-order indices requires
+the computation of second-order indices first. The function
+relies on parallel computing.
 }
 \examples{
 n <- 5000; k <- 8; R <- 10

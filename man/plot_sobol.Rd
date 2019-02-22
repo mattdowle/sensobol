@@ -27,7 +27,6 @@ sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
 R = R, n = n, parallel = "no", ncpus = 1,
 second = TRUE, third = TRUE)
 sens.ci <- sobol_ci(sens, params = colnames(data.frame(A)),
-type = "norm", conf = 0.95, second = TRUE, third = TRUE) \%>\%
-cbind(create.vectors(paste("X", 1:8, sep = ""), second = TRUE, third = TRUE))
+type = "norm", conf = 0.95, second = TRUE, third = TRUE)
 plot_sobol(sens.ci, type = 2)
 }

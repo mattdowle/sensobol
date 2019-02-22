@@ -21,16 +21,15 @@
 #' R = R, n = n, parallel = "no", ncpus = 1,
 #' second = TRUE, third = TRUE)
 #' sens.ci <- sobol_ci(sens, params = colnames(data.frame(A)),
-#' type = "norm", conf = 0.95, second = TRUE, third = TRUE) %>%
-#' cbind(create.vectors(paste("X", 1:8, sep = ""), second = TRUE, third = TRUE))
+#' type = "norm", conf = 0.95, second = TRUE, third = TRUE)
 #' plot_sobol(sens.ci, type = 2)
 
 plot_sobol <- function(x, type = 1) {
+  sensitivity <- low.ci <- high.ci <- parameters <- original <- NULL
   if(type == 1) {
-    gg <- x %>%
-      .[sensitivity == "Si" | sensitivity == "STi"] %>%
-      ggplot2::ggplot(., aes(parameters, original,
-                             fill = sensitivity)) +
+    p <- x[sensitivity == "Si" | sensitivity == "STi"]
+    gg <- ggplot2::ggplot(p, aes(parameters, original,
+                                 sensitivity)) +
       geom_bar(stat = "identity",
                position = position_dodge(0.6),
                color = "black") +
@@ -58,9 +57,8 @@ plot_sobol <- function(x, type = 1) {
     } else {
       stop("Type should be either 1, 2 or 3")
     }
-    gg <- x %>%
-      .[sensitivity == plot.type] %>%
-      ggplot2::ggplot(., aes(reorder(parameters, original),
+    p <- x[sensitivity == plot.type]
+    gg <- ggplot2::ggplot(p, aes(stats::reorder(parameters, original),
                     original)) +
       geom_point() +
       geom_errorbar(aes(ymin = low.ci,
@@ -80,5 +78,36 @@ plot_sobol <- function(x, type = 1) {
             axis.text.x = element_text(angle = 45,
                                        hjust = 1))
   }
+  return(gg)
+}
+
+
+#' Plot model output uncertainty
+#'
+#' @param Y A numeric vector with the model output
+#'
+#' @return a ggplot2 object
+#' @export
+#'
+#' @examples
+#' n <- 500; k <- 8
+#' A <- sobol_matrices(n = n, k = k)
+#' Y <- sobol.Fun(A)
+#' plot_uncertainty(Y)
+plot_uncertainty <- function(Y) {
+  df <- data.frame(Y)
+  gg <- ggplot2::ggplot(df, aes(Y)) +
+    geom_histogram(color = "black",
+                   fill = "white") +
+    labs(x = "Y",
+         y = "Count") +
+    theme(panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          legend.background = element_rect(fill = "transparent",
+                                           color = NA),
+          legend.key = element_rect(fill = "transparent",
+                                    color = NA),
+          axis.text.x = element_text(angle = 45,
+                                     hjust = 1))
   return(gg)
 }

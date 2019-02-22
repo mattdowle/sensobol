@@ -1,0 +1,91 @@
+---
+title: "sensobol: an R package to swiftly compute Sobol' sensitivity indices"
+author: "Arnald Puy"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{sensobol}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+After loading the package, we create a Sobol' matrix to compute first, second and third-order Sobol' indices. To that end, we set `second = TRUE` and `third = TRUE. We then use the Sobol' G function as a function test to get the model output *Y*.
+
+```{r creation_matrix}
+library(sensobol)
+
+# Define settings -----------------------------------------
+
+N <- 5000 # Sample size
+k <- 8 # Number of parameters
+params <- paste("X", 1:8, sep = "") # Vector with the name of the model inputs
+R <- 100 # Number of bootstrap replicas
+
+# Create the Sobol' matrices
+A <- sobol_matrices(n = N, 
+                    k = k,
+                    second = TRUE, 
+                    third = TRUE)
+
+# Compute model output ------------------------------------
+Y <- sobol.Fun(A)
+```
+
+We then compute and bootstrap Sobol' first, second, third and total sensitivity indices. There are two estimators available: the one by @Jansen1999 (default) and the one by @Saltelli2010a. The `sobol_indices` function also allows for parallel computing to speed up the bootstrapping. For more information on how to use the parallel and ncpus parameters, check the `boot` function of the `boot` package.
+
+```{r compute_sobol}
+
+# Compute Sobol' indices ----------------------------------
+
+dt <- sobol_indices(Y = Y, 
+                    params = params, 
+                    type = "saltelli", 
+                    R = R,
+                    n = N, 
+                    parallel = "multicore", 
+                    ncpus = parallel::detectCores() - 2, 
+                    second = TRUE, 
+                    third = TRUE)
+```
+
+We can compute the confidence intervals by selecting both the confidence level and the method. The package currently offers suport for calculating confidence intervals using the normal, the percentile, the bca and the basic method. For more information on their characteristics, check the `boot.ci` function of the `boot` package. 
+
+```{r ci_sobol}
+
+# Compute confidence intervals ----------------------------
+
+dt.ci <- sobol_ci(dt, 
+                  params = params, 
+                  type = "norm", 
+                  conf = 0.95, 
+                  second = TRUE, 
+                  third = TRUE) 
+```
+
+To visualize the Sobol' indices, use the `plot_sobol` function with type = 1. For second and third-order indices, use type = 2 and type = 3 respectively. Smaller confidence intervals will
+be obtained by increasing the sample size *N*.
+
+```{r plot_sobol_first, fig.height=3, fig.width=4}
+
+# Plot Sobol' first and total-order indices -------------------------
+
+plot_sobol(dt.ci, type = 1)
+```
+
+```{r plot_sobol_second, fig.height=3.5, fig.width=7.2}
+
+# Plot Sobol' second and third-order indices ------------------------
+
+lapply(2:3, function(x) plot_sobol(dt.ci, type = x))
+```
+
+# References
+
