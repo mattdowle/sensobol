@@ -35,3 +35,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: http://github.com/arnaldpuy/sensobol 
+BugReports: http://github.com/arnaldpuy/sensobol/issues
