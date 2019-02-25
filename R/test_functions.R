@@ -24,11 +24,11 @@ sobol_Fun <- function(X) {
 
 #' Ishigami function
 #'
-#' @param X1 First model input
-#' @param X2 Second model input
-#' @param X3 Third model input
+#' @param X1 First model input.
+#' @param X2 Second model input.
+#' @param X3 Third model input.
 #'
-#' @return A numeric vector with the model output
+#' @return A numeric vector with the model output.
 
 ishigami <- function(X1, X2, X3) {
   A <- 2
@@ -41,7 +41,7 @@ ishigami <- function(X1, X2, X3) {
 #' @param X A data frame, data table or matrix with the three model inputs
 #' required to run the Ishigami function.
 #'
-#' @return A numeric vector with the model output
+#' @return A numeric vector with the model output.
 #' @export
 #'
 #' @examples

@@ -7,14 +7,14 @@
 ishigami(X1, X2, X3)
 }
 \arguments{
-\item{X1}{First model input}
+\item{X1}{First model input.}
 
-\item{X2}{Second model input}
+\item{X2}{Second model input.}
 
-\item{X3}{Third model input}
+\item{X3}{Third model input.}
 }
 \value{
-A numeric vector with the model output
+A numeric vector with the model output.
 }
 \description{
 Ishigami function

@@ -1,5 +1,5 @@
 ---
-title: "sensobol: an R package to swiftly compute Sobol' sensitivity indices"
+title: "sensobol: an R package to swiftly compute and plot Sobol' sensitivity indices"
 author: "Arnald Puy"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -17,8 +17,11 @@ knitr::opts_chunk$set(
 )
 ```
 
+The `sensobol` package relies on `data.table` and parallel functions in the `boot` package to rapidly compute and bootstrap first, total, and if desired, second and third-order sensitivity indices. It currently uses two estimators: the @Jansen1999 (default) and the @Saltelli2010a.
 
-After loading the package, we create a Sobol' matrix to compute first, second and third-order Sobol' indices. To that end, we set `second = TRUE` and `third = TRUE`. We then use the Sobol' G function as a function test to get the model output *Y*.
+## Creation of the sample matrix
+
+After loading the package, the first step is to define the settings of the uncertainty and sensitivity analysis, including the sample size of the sample matrix, the number of model inputs and the sensitivity indices we are interested in. As regards to the latter, `sensobol` offers the possibility to calculate up to third-order effects. Once these features are defined, we can build the sample matrix, which relies on Sobol' quasi-random number sequences, and run the desired model. In this vignette we will use the Sobol' G as a toy function.
 
 ```{r creation_matrix}
 library(sensobol)
@@ -33,14 +36,39 @@ R <- 100 # Number of bootstrap replicas
 # Create the Sobol' matrices
 A <- sobol_matrices(n = N, 
                     k = k,
-                    second = TRUE, 
-                    third = TRUE)
+                    second = TRUE, # We set a matrix for second-order effects
+                    third = TRUE) # We set a matrix for third-order effects
 
 # Compute model output ------------------------------------
 Y <- sobol_Fun(A)
 ```
 
-We then compute and bootstrap Sobol' first, second, third and total sensitivity indices. There are two estimators available: the one by @Jansen1999 (default) and the one by @Saltelli2010a. The `sobol_indices` function also allows for parallel computing to speed up the bootstrapping. For more information on how to use the parallel and ncpus parameters, check the `boot` function of the `boot` package.
+## Uncertainty plot
+
+Once the model output is computed, it is informative to visualize its uncertainty. `sensobol` provides a function to assess the model output distribution:
+
+```{r plot_uncertainty, fig.height=3, fig.width=4}
+
+# Plot distribution of model output -----------------------
+
+plot_uncertainty(Y)
+```
+
+## Sensitivity analysis
+
+We can also plot scatterplots of the model output against the model inputs. This is a simple sensitivity analysis that allows to initially observe which model inputs might have an effect on the model output *Y*, as well as establish its relative importance. In general, scatterplots with "shape" indicate an influential model input.
+
+```{r plot_scatter, fig.height=6.5, fig.width=5}
+
+# Scatterplots of model inputs vs. model output -----------
+
+plot_scatter(x = A, 
+             Y = Y, 
+             n = N, 
+             params = params)
+```
+
+We then compute and bootstrap Sobol' indices. Since we have designed a sample matrix that allows to compute up to third-order effects, we will go for first, second, third and total sensitivity indices here. As stated in the introduction of the vignette, the package currently offers two estimators: the one by @Jansen1999 (default) and the one by @Saltelli2010a. The `sobol_indices` function also allows for parallel computing to speed up the bootstrapping. For more information on how to use the parallel and ncpus parameters, check the `boot` function of the `boot` package.
 
 ```{r compute_sobol}
 
@@ -57,7 +85,16 @@ dt <- sobol_indices(Y = Y,
                     third = TRUE)
 ```
 
-We can compute the confidence intervals by selecting both the confidence level and the method. The package currently offers suport for calculating confidence intervals using the normal, the percentile, the bca and the basic method. For more information on their characteristics, check the `boot.ci` function of the `boot` package. 
+The output of `sobol_indices` is a `data.table` with two columns: firstly, the column `parameters`, which indicates whether the Sobol' indices have been calculated for single model inputs, for pairs of model inputs (second-order) or for three model inputs (third-order). Secondly, the column `V1`, which stores an object of class `boot` with all the results of the bootstrap. In the column `V1`, for instance, we could access the bootstrap replicas. This is useful if we want to assess their distribution in order to select the most appropriate method for the computation of confidence intervals:
+
+```{r print_output}
+
+# Show output of the sobol_indices function ---------------
+
+print(dt)
+```
+
+Once we have assessed the distribution of the replicas, we can decide which confidence interval suits our data best. `sensobol` currently offers suport for normal, percentile, bca and basic confidence intervals, all retrieved internally from the `boot::boot.ci` function. In this case, we will compute normal confidence intervals:
 
 ```{r ci_sobol}
 
@@ -71,14 +108,36 @@ dt.ci <- sobol_ci(dt,
                   third = TRUE) 
 ```
 
-To visualize the Sobol' indices, use the `plot_sobol` function with `type = 1`. For second and third-order indices, use `type = 2` and `type = 3` respectively. Narrower confidence intervals will
-be obtained by increasing the sample size *N*.
+Due to measurement error, it is likely that model inputs that are not influential display sensitivity indices that are not zero. In order to assess the extent of this measurement error, we can calculate the Sobol' indices of a dummy parameter. This will allow to differentiate truly influential model inputs from those whose non-zero indices might simply result from the noise of the calculation. The `sensobol` package implements the approach by @KhorashadiZadeh2017 to calculate and bootstrap the Sobol' indices of a dummy parameter:
 
-```{r plot_sobol_first, fig.height=3, fig.width=4}
+```{r sobol_dummy}
+
+# Compute Sobol' indices of a dummy parameter -------------
+
+dt.dummy <- sobol_dummy(Y = Y, 
+                        params = params, 
+                        R = R, 
+                        n = N)
+```
+
+The function `sobol_dummy_ci` computes the confidence intervals for the Sobol' indices of the dummy parameter:
+
+```{r sobol_dummy_ci}
+
+# Compute confidence intervals for the dummy parameter ----
+
+dt.dummy.ci <- sobol_ci_dummy(dt.dummy, 
+                              type = "norm", 
+                              conf = 0.95)
+```
+
+To visualize Sobol' first ($S_i$) and total ($S_{Ti}$) -order indices, use the `plot_sobol` function with `type = 1`. This setting also allows to plot the confidence intervals of the dummy parameter, if needed. For second ($S_{ij}$) and third ($S_{ijk}$) - order indices, use `type = 2` and `type = 3` respectively. Narrower confidence intervals will be obtained by designing a sample matrix with a larger sample size *N*.
+
+```{r plot_sobol_first, fig.height=3.5, fig.width=4.5, fig.cap="First and total-order Sobol' indices. The transparent, blue horizontal frame shows the approximation error for $S_{Ti}$, computed via a dummy parameter. Only the model inputs with $S_{Ti}$ that do not overlap the frame can be considered to have an interaction effect. The approximation error for $S_i$ is very small and can not be seen in the plot."}
 
 # Plot Sobol' first and total-order indices -------------------------
 
-plot_sobol(dt.ci, type = 1)
+plot_sobol(dt.ci, dummy = dt.dummy.ci, type = 1)
 ```
 
 ```{r plot_sobol_second, fig.height=3.5, fig.width=7.2}
@@ -88,5 +147,7 @@ plot_sobol(dt.ci, type = 1)
 lapply(2:3, function(x) plot_sobol(dt.ci, type = x))
 ```
 
-# References
+Have a nice uncertainty / sensitivity analysis!
+
+## References
 

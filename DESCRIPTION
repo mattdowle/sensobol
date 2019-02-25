@@ -5,10 +5,11 @@ Authors@R:
     person(given = "Arnald",
            family = "Puy",
            role = c("aut", "cre"),
-           email = "arnald.puy@gmail.com")
-Description: It computes Sobol' first, second, third and total-order effects using
-    the estimators by Saltelli et al. 2010 and Jansen 1999. It relies
-    on data.table and parallel computing.
+           email = "arnald.puy@gmail.com", 
+           comment = c(ORCID = "0000-0001-9469-2156"))
+Description: It allows to swiftly compute and bootstrap Sobol' first, second, third and 
+    total-order effects using the estimators by Saltelli et al. 2010 and 
+    Jansen 1999. It also provides support for plotting the results via ggplot2.
 License: GPL-3
 Encoding: UTF-8
 Imports:
@@ -18,13 +19,14 @@ Imports:
     ggplot2 (>= 3.1.0),
     magrittr (>= 1.5),
     parallel (>= 3.5.2),
-    purrr (>= 0.3.0),
     randtoolbox (>= 1.17.1),
+    Rdpack (>= 0.7),
     rlang (>= 0.3.1),
     scales (>= 1.0.0),
     stats,
     stringr (>= 1.4.0),
     utils (>= 3.5.2)
+RdMacros: Rdpack
 LazyData: true
 Depends: R (>= 3.4.0)
 Roxygen: list(markdown = TRUE)

@@ -2,42 +2,49 @@
 % Please edit documentation in R/sobol_boot.R
 \name{sobol_ci}
 \alias{sobol_ci}
-\title{Computes bootstrap confidence intervals for Sobol' indices}
+\title{Bootstrap confidence intervals for Sobol' indices.}
 \usage{
 sobol_ci(b, params, type, conf, second = FALSE, third = FALSE)
 }
 \arguments{
-\item{b}{A boot object with the computed Sobol' indices.}
+\item{b}{The output of the \code{sobol_indices} function.}
 
 \item{params}{A vector with the name of the model inputs.}
 
 \item{type}{A vector of character strings representing
 the type of intervals required. The value should be any subset
-of the values c('norm','basic', 'perc', 'bca'). For more information,
-check the function boot::boot.ci.}
+of the values \code{c("norm", "basic", "perc", "bca")}. For more information,
+check the function \code{\link{boot.ci}}.}
 
 \item{conf}{A scalar or vector containing the confidence
 level(s) of the required interval(s).}
 
-\item{second}{Boolean. If second == TRUE, it computes the confidence
-intervals for second-order indices. Default is second == FALSE.}
+\item{second}{Logical. If \code{second = TRUE}, it computes the confidence
+intervals for second-order indices. Default is \code{second = FALSE}.}
 
-\item{third}{Boolean. If third == TRUE, it computes the confidence
-intervals for second-order indices. Default is third == FALSE.}
+\item{third}{Logical. If \code{third = TRUE}, it computes the confidence
+intervals for third-order indices. Default is \code{third = FALSE}.}
 }
 \value{
 A data table.
 }
 \description{
-Computes bootstrap confidence intervals for Sobol' indices
+It computes bootstrap confidence intervals for Sobol' indices.
 }
 \examples{
+# Define settings:
 n <- 100; k <- 8; R <- 10
+# Design the sample matrix:
 A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
+# Compute the model output:
 Y <- sobol_Fun(A)
+# Compute the Sobol' indices:
 sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
 R = R, n = n, parallel = "no", ncpus = 1,
 second = TRUE, third = TRUE)
-sobol_ci(sens, params = colnames(data.frame(A)),
-type = "norm", conf = 0.95, second = TRUE, third = TRUE)
+# Compute confidence intervals:
+sobol_ci(sens, params = colnames(data.frame(A)), type = "norm", conf = 0.95)
+}
+\seealso{
+\code{\link{boot}}, \code{\link{boot.ci}}.
 }

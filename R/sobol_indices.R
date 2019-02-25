@@ -324,48 +324,158 @@ sobol_third_MapplyS <- function(d, i)
                 d[i, "Y_ABjk"],
                 d[i, "Y_ABijk"]))
 
-# FUNCTION TO COMPUTE FIRST, SECOND, THIRD AND TOTAL
-# SOBOL' INDICES --------------------------------------------------------------
+# FUNCTION TO COMPUTE SOBOL' INDICES FOR A DUMMY PARAMETER --------------------
 
-#' Computation of first, second, third and total-effects Sobol' indices.
+#' Computation of Sobol' indices for a dummy parameter.
 #'
-#' It computes and bootstraps up to third-order Sobol' indices
-#' using either the Saltelli et al. 2010 or the Jansen 1999
-#' estimator. The computation of third-order indices requires
-#' the computation of second-order indices first. The function
-#' relies on parallel computing.
+#' @param Y_A Numeric vector, model output of the A matrix.
+#' @param Y_B Numeric vector, model output of the B matrix.
+#' @param Y_AB Numeric vector, model output of the AB matrix,
+#' where the AB matrix is composed of all columns of the
+#' A matrix except the i-th, which comes from the B matrix.
+#'
+#' @return A numeric vector with the first and total Sobol' indices.
+sobol_dummyT <- function(Y_A, Y_B, Y_AB) {
+  f0 <- (1 / length(Y_A)) * sum(Y_A * Y_B)
+  VY <- 1 / (2 * length(Y_A) - 1) * sum(Y_A ^ 2 + Y_B ^ 2) - f0
+  Si <- (1 / (length(Y_A) - 1) * sum(Y_A * Y_B) - f0) / VY
+  STi <- 1 - (1 / (length(Y_A) - 1) * sum(Y_B * Y_B) - f0) / VY
+  return(c(Si, STi))
+}
+
+
+#' Computation of Sobol' indices for a dummy parameter.
+#'
+#' @param d Data table with the model output of
+#' the A, B and AB matrix as columns
+#' @param i Indices to allow bootstrap.
+#'
+#' @return The first and total Sobol' indices for a dummy parameter.
+sobol_dummy_Mapply <- function(d, i) {
+  return(mapply(sobol_dummyT,
+                d[i, "Y_A"],
+                d[i, "Y_B"],
+                d[i, "Y_AB"]))
+}
+
+
+
+#' Computation of Sobol' indices for a dummy parameter
+#'
+#' This function computes first and total-order Sobol' indices for a dummy
+#' parameter following the formulas shown
+#' in \insertCite{KhorashadiZadeh2017;textual}{sensobol}.
 #'
 #' @param Y Numeric vector, model output.
 #' @param params Vector with the name of the model inputs.
-#' @param type Estimator to use. type == "saltelli" to use
-#' the Saltelli et al. 2010 estimator, or type == "jansen"
-#' to use the Jansen 1999 estimator. Default is type == "jansen.
 #' @param R Integer, number of bootstrap replicas.
 #' @param n Integer, sample size of the sample matrix.
 #' @param parallel The type of parallel operation to be used (if any).
 #' If missing, the default is taken from the option "boot.parallel"
 #' (and if that is not set, "no"). For more information, check the
-#' "parallel" option in the boot::boot function.
+#' \code{parallel} option in the \code{boot} function of the \code{\link{boot}} package.
 #' @param ncpus Integer: number of processes to be used in parallel operation:
 #' typically one would chose this to the number of available CPUs.
-#' For more information, check the "parallel" option in
-#' the boot::boot function.
-#' @param second Boolean. if second == "TRUE", it computes
+#' Check the \code{ncpus} option in the \code{boot} function of the \code{\link{boot}} package.
+#'
+#' @importFrom Rdpack reprompt
+#' @references
+#' \insertAllCited{}
+#'
+#' @return A data.table object. It includes a column with the results of the bootstrap.
+#' @seealso Check the function \code{\link{boot}} for further details on the bootstrapping
+#' and the components available within the class \code{boot}.
+#' @export
+#'
+#' @examples
+#' # Define settings:
+#' n <- 100; k <- 8; R <- 10
+#' # Design the sample matrix:
+#' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
+#' # Compute the model output:
+#' Y <- sobol_Fun(A)
+#' # Compute the Sobol' indices for the dummy parameter:
+#' sobol_dummy(Y = Y, params = colnames(data.frame(A)), R = R, n = n)
+sobol_dummy <- function(Y, params, R, n,
+                        parallel = "no", ncpus = 1) {
+  # Calculate the number of parameters
+  k <- length(params)
+  # Calculate the length of the A and B matrices
+  p <- length(1:n)
+  # Extract the model output of the A matrix
+  Y_A <- Y[1:p]
+  # Extract the model output of the B matrix
+  Y_B <- Y[(p + 1) : (2 * p)]
+  # Extract the model output of the AB matrix
+  Y_AB <- Y[(2*p+1):(n * (k + 2))]
+  # Create vector with parameters
+  parameters <- rep(params, each = length(Y_A))
+  # merge vector with data table
+  vec <- cbind(Y_A, Y_B, Y_AB)
+  out <- data.table::data.table(vec, parameters)
+  out.1 <- out %>%
+    # remove rows with NA
+    na.omit()
+  # Bootstrap Sobol'indices
+  Si.STi <- out.1[, list(list(boot::boot(.SD,
+                                         sobol_dummy_Mapply,
+                                         R = R,
+                                         parallel = parallel,
+                                         ncpus = ncpus)))]
+  return(Si.STi)
+}
+
+
+
+
+# FUNCTION TO COMPUTE FIRST, SECOND, THIRD AND TOTAL
+# SOBOL' INDICES --------------------------------------------------------------
+
+#' Computation of first, second, third and total-order Sobol' indices
+#'
+#' It computes and bootstraps up to third-order Sobol' indices
+#' using either the \insertCite{Saltelli2010a;textual}{sensobol} or the
+#' \insertCite{Jansen1999;textual}{sensobol}
+#' estimator.
+#'
+#' @param Y Numeric vector, model output.
+#' @param params Vector with the name of the model inputs.
+#' @param type Estimator to use: \code{type = "saltelli"} uses
+#' the \insertCite{Saltelli2010a;textual}{sensobol} estimator; \code{type = "jansen"}
+#' uses the \insertCite{Jansen1999;textual}{sensobol} estimator. Default is \code{type = "jansen"}.
+#' @param R Integer, number of bootstrap replicas.
+#' @param n Integer, sample size of the sample matrix.
+#' @param parallel The type of parallel operation to be used (if any).
+#' If missing, the default is taken from the option "boot.parallel"
+#' (and if that is not set, "no"). For more information, check the
+#' \code{parallel} option in the \code{boot} function of the \code{\link{boot}} package.
+#' @param ncpus Integer: number of processes to be used in parallel operation:
+#' typically one would chose this to the number of available CPUs.
+#' Check the \code{ncpus} option in the \code{boot} function of the \code{\link{boot}} package.
+#' @param second Logical. if \code{second = TRUE}, it computes
 #' second-order Sobol' indices.
-#' @param third Boolean. if third == "TRUE", it computes
+#' @param third Logical. if \code{third = TRUE}, it computes
 #' third-order Sobol' indices.
 #' @importFrom data.table ".SD"
 #' @importFrom rlang ":="
+#' @importFrom Rdpack reprompt
+#' @references
+#' \insertAllCited{}
 #'
-#' @return A data.table object.
+#' @return A data.table object. It includes a column with the results of the bootstrap.
+#' @seealso Check the function \code{\link{boot}} for further details on the bootstrapping
+#' and the components available within the class \code{boot}.
 #' @export
 #' @examples
+#' # Define settings:
 #' n <- 100; k <- 8; R <- 10
+#' # Design the sample matrix:
 #' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
+#' # Compute the model output:
 #' Y <- sobol_Fun(A)
+#' # Compute the Sobol' indices:
 #' sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
-#' R = R, n = n, parallel = "no", ncpus = 1,
-#' second = TRUE, third = TRUE)
+#' R = R, n = n, parallel = "no", ncpus = 1, second = TRUE, third = TRUE)
 sobol_indices <- function(Y, params, type = "jansen",
                           R, n, parallel = "no", ncpus = 1,
                           second = FALSE, third = FALSE) {

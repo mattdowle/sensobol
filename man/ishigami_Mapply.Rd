@@ -11,7 +11,7 @@ ishigami_Mapply(X)
 required to run the Ishigami function.}
 }
 \value{
-A numeric vector with the model output
+A numeric vector with the model output.
 }
 \description{
 Ishigami function

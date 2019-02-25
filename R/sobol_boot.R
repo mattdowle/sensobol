@@ -17,40 +17,42 @@
 bootstats <- function(b, conf = conf, type = type) {
   p <- length(b$t0)
   lab <- c("original", "bias", "std.error", "low.ci", "high.ci")
-  out <- as.data.frame(matrix(nrow = p, ncol = length(lab), dimnames = list(NULL, lab)))
+  tmp <- as.data.frame(matrix(nrow = p,
+                              ncol = length(lab),
+                              dimnames = list(NULL, lab)))
   for (i in 1:p) {
     # original estimation, bias, standard deviation
-    out[i, "original"] <- b$t0[i]
-    out[i, "bias"] <- mean(b$t[, i]) - b$t0[i]
-    out[i, "std.error"] <- sd(b$t[, i])
+    tmp[i, "original"] <- b$t0[i]
+    tmp[i, "bias"] <- mean(b$t[, i]) - b$t0[i]
+    tmp[i, "std.error"] <- sd(b$t[, i])
     # confidence interval
     if (type == "norm") {
       ci <- boot.ci(b, index = i, type = "norm", conf = conf)
       if (!is.null(ci)) {
-        out[i, "low.ci"] <- ci$norm[2]
-        out[i, "high.ci"] <- ci$norm[3]
+        tmp[i, "low.ci"] <- ci$norm[2]
+        tmp[i, "high.ci"] <- ci$norm[3]
       }
     } else if (type == "basic") {
       ci <- boot.ci(b, index = i, type = "basic", conf = conf)
       if (!is.null(ci)) {
-        out[i, "low.ci"] <- ci$basic[4]
-        out[i, "high.ci"] <- ci$basic[5]
+        tmp[i, "low.ci"] <- ci$basic[4]
+        tmp[i, "high.ci"] <- ci$basic[5]
       }
     } else if (type == "percent") {
       ci <- boot.ci(b, index = i, type = "perc", conf = conf)
       if (!is.null(ci)) {
-        out[i, "low.ci"] <- ci$percent[4]
-        out[i, "high.ci"] <- ci$percent[5]
+        tmp[i, "low.ci"] <- ci$percent[4]
+        tmp[i, "high.ci"] <- ci$percent[5]
       }
     } else if (type == "bca") {
       ci <- boot.ci(b, index = i, conf = conf)
       if (!is.null(ci)) {
-        out[i, "low.ci"] <- ci$bca[4]
-        out[i, "high.ci"] <- ci$bca[5]
+        tmp[i, "low.ci"] <- ci$bca[4]
+        tmp[i, "high.ci"] <- ci$bca[5]
       }
     }
   }
-  return(out)
+  return(tmp)
 }
 
 #' Computes bootstrap confidence intervals
@@ -151,37 +153,87 @@ create_vectors <- function(params, second = FALSE, third = FALSE) {
   return(out)
 }
 
-#' Computes bootstrap confidence intervals for Sobol' indices
+#' Bootstrap confidence intervals for Sobol' indices.
 #'
-#' @param b A boot object with the computed Sobol' indices.
+#' It computes bootstrap confidence intervals for Sobol' indices.
+#'
+#' @param b The output of the \code{sobol_indices} function.
 #' @param params A vector with the name of the model inputs.
 #' @param type A vector of character strings representing
 #' the type of intervals required. The value should be any subset
-#' of the values c('norm','basic', 'perc', 'bca'). For more information,
-#' check the function boot::boot.ci.
+#' of the values \code{c("norm", "basic", "perc", "bca")}. For more information,
+#' check the function \code{\link{boot.ci}}.
 #' @param conf A scalar or vector containing the confidence
 #' level(s) of the required interval(s).
-#' @param second Boolean. If second == TRUE, it computes the confidence
-#' intervals for second-order indices. Default is second == FALSE.
-#' @param third Boolean. If third == TRUE, it computes the confidence
-#' intervals for second-order indices. Default is third == FALSE.
+#' @param second Logical. If \code{second = TRUE}, it computes the confidence
+#' intervals for second-order indices. Default is \code{second = FALSE}.
+#' @param third Logical. If \code{third = TRUE}, it computes the confidence
+#' intervals for third-order indices. Default is \code{third = FALSE}.
 #'
 #' @return A data table.
+#' @seealso \code{\link{boot}}, \code{\link{boot.ci}}.
 #'
 #' @export
 #'
 #' @examples
+#' # Define settings:
 #' n <- 100; k <- 8; R <- 10
+#' # Design the sample matrix:
 #' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
+#' # Compute the model output:
 #' Y <- sobol_Fun(A)
+#' # Compute the Sobol' indices:
 #' sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
 #' R = R, n = n, parallel = "no", ncpus = 1,
 #' second = TRUE, third = TRUE)
-#' sobol_ci(sens, params = colnames(data.frame(A)),
-#' type = "norm", conf = 0.95, second = TRUE, third = TRUE)
+#' # Compute confidence intervals:
+#' sobol_ci(sens, params = colnames(data.frame(A)), type = "norm", conf = 0.95)
 sobol_ci <- function(b, params, type, conf, second = FALSE, third = FALSE) {
   out <- sobol_ci_temp(b = b, params = params, type = type,
                         conf = conf, second = second, third = third) %>%
     cbind(create_vectors(params = params, second = second, third = third))
   return(out)
+}
+
+
+# FUNCTION TO COMPUTE CONFIDENCE INTERVALS FOR DUMMY PARAMETER ----------------
+
+
+#' Bootstrap confidence intervals for the dummy parameter
+#'
+#' It computes bootstrap confidence intervals for the dummy parameter.
+#'
+#' @param b The output of the \code{sobol_dummy} function.
+#' @param type A vector of character strings representing
+#' the type of intervals required. The value should be any subset
+#' of the values \code{c("norm", "basic", "perc", "bca")}. For more information,
+#' check the function \code{\link{boot.ci}}.
+#' @param conf A scalar or vector containing the confidence
+#' level(s) of the required interval(s).
+#' @importFrom rlang ":="
+#'
+#' @return A data table.
+#' @seealso \code{\link{boot}}, \code{\link{boot.ci}}.
+#' @export
+#'
+#' @examples
+#' # Define settings:
+#' n <- 100; k <- 8; R <- 10
+#' # Design the sample matrix:
+#' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
+#' # Compute the model output:
+#' Y <- sobol_Fun(A)
+#' # Compute the Sobol' indices for the dummy parameter:
+#' s.dummy <- sobol_dummy(Y = Y, params = colnames(data.frame(A)), R = R, n = n)
+#' # Compute the confidence intervals for the dummy parameter:
+#' sobol_ci_dummy(s.dummy, type = "norm", conf = 0.95)
+sobol_ci_dummy <- function(b, type = type, conf = conf) {
+  V1 <- NULL
+  sensitivity <- c("Si", "STi")
+  parameters <- "dummy"
+  out <- lapply(b[, V1], function(x) bootstats(x,
+                                               type = type,
+                                               conf = 0.95)) %>%
+    data.table::rbindlist()
+  return(cbind(out, parameters, sensitivity))
 }

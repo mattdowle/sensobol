@@ -7,17 +7,21 @@
 plot_uncertainty(Y)
 }
 \arguments{
-\item{Y}{A numeric vector with the model output}
+\item{Y}{A numeric vector with the model output.}
 }
 \value{
-a ggplot2 object
+a ggplot2 object.
 }
 \description{
-Plot model output uncertainty
+It creates an histogram with the model output distribution.
 }
 \examples{
-n <- 500; k <- 8
-A <- sobol_matrices(n = n, k = k)
+# Define settings:
+n <- 100; k <- 8; R <- 10
+# Design the sample matrix:
+A <- sobol_matrices(n = n, k = k, second = FALSE, third = FALSE)
+# Compute the model output:
 Y <- sobol_Fun(A)
+# Plot the model output distribution:
 plot_uncertainty(Y)
 }

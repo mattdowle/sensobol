@@ -4,35 +4,58 @@
 
 #' Plot Sobol' first and total-order indices
 #'
-#' @param x A data.table
-#' @param type An integer. If type == 1, it plots first and total effects.
-#' If type == 2, it plots second-order effects. If type == 3, it plots
-#' third-order effects. Default is type == 1.
+#' @param x A data.table.
+#' @param dummy The output of the \code{sobol_ci_dummy} function. If supplied and
+#' \code{type = 1}, the plot includes an horizontal transparent frame showing the confidence
+#' intervals of the first and total-order indices for the dummy parameter.
+#' @param type An integer. If \code{type = 1}, it plots first and total effects.
+#' If \code{type = 2}, it plots second-order effects. If \code{type = 3}, it plots
+#' third-order effects. Default is \code{type = 1}.
 #'
-#' @return A ggplot object
+#' @return A ggplot object.
 #' @import ggplot2
 #' @export
 #'
 #' @examples
+#' # Define settings:
 #' n <- 100; k <- 8; R <- 10
+#' # Design the sample matrix:
 #' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
+#' # Compute the model output:
 #' Y <- sobol_Fun(A)
+#' # Compute the Sobol' indices:
 #' sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
-#' R = R, n = n, parallel = "no", ncpus = 1,
-#' second = TRUE, third = TRUE)
-#' sens.ci <- sobol_ci(sens, params = colnames(data.frame(A)),
-#' type = "norm", conf = 0.95, second = TRUE, third = TRUE)
-#' plot_sobol(sens.ci, type = 2)
-
-plot_sobol <- function(x, type = 1) {
+#' R = R, n = n, parallel = "no", ncpus = 1, second = TRUE, third = TRUE)
+#' # Compute the Sobol' indices for the dummy parameter:
+#' s.dummy <- sobol_dummy(Y = Y, params = colnames(data.frame(A)), R = R, n = n)
+#' # Compute confidence intervals:
+#' sens.ci <- sobol_ci(sens, params = colnames(data.frame(A)), type = "norm", conf = 0.95)
+#' # Compute confidence intervals for the dummy parameter:
+#' s.dummy.ci <- sobol_ci_dummy(s.dummy, type = "norm", conf = 0.95)
+#' # Plot Sobol' indices:
+#' plot_sobol(sens.ci, dummy = s.dummy.ci, type = 1)
+plot_sobol <- function(x, dummy = NULL, type = 1) {
   sensitivity <- low.ci <- high.ci <- parameters <- original <- NULL
   if(type == 1) {
+    if(is.null(dummy) == FALSE) {
+      plot.dummy <- geom_rect(data = dummy,
+                              aes(ymin = 0,
+                                  ymax = high.ci,
+                                  xmin = -Inf,
+                                  xmax = Inf,
+                                  fill = sensitivity),
+                              alpha = 0.2,
+                              inherit.aes = FALSE)
+    } else {
+      plot.dummy <- NULL
+    }
     p <- x[sensitivity == "Si" | sensitivity == "STi"]
     gg <- ggplot2::ggplot(p, aes(parameters, original,
                                  fill = sensitivity)) +
       geom_bar(stat = "identity",
                position = position_dodge(0.6),
                color = "black") +
+      plot.dummy +
       geom_errorbar(aes(ymin = low.ci,
                         ymax = high.ci),
                     position = position_dodge(0.6)) +
@@ -85,15 +108,21 @@ plot_sobol <- function(x, type = 1) {
 
 #' Plot model output uncertainty
 #'
-#' @param Y A numeric vector with the model output
+#' It creates an histogram with the model output distribution.
 #'
-#' @return a ggplot2 object
+#' @param Y A numeric vector with the model output.
+#'
+#' @return a ggplot2 object.
 #' @export
 #'
 #' @examples
-#' n <- 500; k <- 8
-#' A <- sobol_matrices(n = n, k = k)
+#' # Define settings:
+#' n <- 100; k <- 8; R <- 10
+#' # Design the sample matrix:
+#' A <- sobol_matrices(n = n, k = k, second = FALSE, third = FALSE)
+#' # Compute the model output:
 #' Y <- sobol_Fun(A)
+#' # Plot the model output distribution:
 #' plot_uncertainty(Y)
 plot_uncertainty <- function(Y) {
   df <- data.frame(Y)
@@ -114,9 +143,9 @@ plot_uncertainty <- function(Y) {
 
 # PLOT SCATTERPLOT OF MODEL OUTPUT VERSUS MODEL INPUTS ------------------------
 
-#' Scatterplots of model output versus the model inputs
+#' Scatterplots of the model output against the model inputs
 #'
-#' @param x a data table, data frame or matrix with the
+#' @param x A data table, data frame or matrix with the
 #' model inputs.
 #' @param Y Numeric vector with the model output.
 #' @param n Integer, sample size of the Sobol' matrix.
@@ -126,9 +155,13 @@ plot_uncertainty <- function(Y) {
 #' @export
 #'
 #' @examples
-#' n <- 100; k <- 8
-#' A <- sobol_matrices(n = n, k = k)
+#' # Define settings:
+#' n <- 100; k <- 8; R <- 10
+#' # Design the sample matrix:
+#' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
+#' # Compute the model output:
 #' Y <- sobol_Fun(A)
+#' # Plot scatterplots:
 #' plot_scatter(x = A, Y = Y, n = n, params = colnames(data.frame(A)))
 plot_scatter <- function(x, Y, n, params) {
   value <- NULL

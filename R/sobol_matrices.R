@@ -77,21 +77,26 @@ scrambled_third <- function(A, B) {
 # FIRST AND TOTAL ORDER EFFECTS - AS WELL AS SECOND AND THIRD
 # ORDER EFFECTS, IF DESIRED ---------------------------------------------------
 
-#' Creation of Sobol' matrices to compute first, second, third and total-
-#' order effects.
+#' Creation of the sample matrices
+#'
+#' It creates the sample matrices to compute Sobol' first and total-order indices.
+#' If needed, it also creates the sample matrices required to compute second and
+#' third-order indices. It uses Sobol' quasi-random number sequences.
 #'
 #' @param n Integer, sample size of the Sobol' matrix.
 #' @param k Integer, number of model inputs.
-#' @param second Boolean. If second == TRUE, it creates the scrambled
-#' matrix required to compute second-order effects. Default is second == FALSE.
-#' @param third Boolean. If third == TRUE, it creates the scrambled
-#' matrix required to compute third-order effects. Default is second == FALSE.
+#' @param second Logical. If \code{second = TRUE}, it creates the scrambled
+#' matrix required to compute second-order indices. Default is \code{second = FALSE}.
+#' @param third Logical. If \code{third = TRUE}, it creates the scrambled
+#' matrix required to compute third-order indices. Default is \code{third = FALSE}.
+#' @seealso Check the function \code{\link{sobol}} in the package \code{randtoolbox}
+#' to see how the Sobol' quasi-random number sequences are constructed.
 #'
-#' @return A matrix
+#' @return A matrix.
 #' @export
 #'
 #' @examples
-#' sobol_matrices(n = 1000, k = 8, second = TRUE, third = TRUE)
+#' sobol_matrices(n = 100, k = 8, second = TRUE, third = TRUE)
 sobol_matrices <- function(n, k, second = FALSE, third = FALSE) {
   # Create the Sobol quasi-random number sequence
   df <- randtoolbox::sobol(n = n,

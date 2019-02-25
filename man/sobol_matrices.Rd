@@ -2,8 +2,7 @@
 % Please edit documentation in R/sobol_matrices.R
 \name{sobol_matrices}
 \alias{sobol_matrices}
-\title{Creation of Sobol' matrices to compute first, second, third and total-
-order effects.}
+\title{Creation of the sample matrices}
 \usage{
 sobol_matrices(n, k, second = FALSE, third = FALSE)
 }
@@ -12,19 +11,24 @@ sobol_matrices(n, k, second = FALSE, third = FALSE)
 
 \item{k}{Integer, number of model inputs.}
 
-\item{second}{Boolean. If second == TRUE, it creates the scrambled
-matrix required to compute second-order effects. Default is second == FALSE.}
+\item{second}{Logical. If \code{second = TRUE}, it creates the scrambled
+matrix required to compute second-order indices. Default is \code{second = FALSE}.}
 
-\item{third}{Boolean. If third == TRUE, it creates the scrambled
-matrix required to compute third-order effects. Default is second == FALSE.}
+\item{third}{Logical. If \code{third = TRUE}, it creates the scrambled
+matrix required to compute third-order indices. Default is \code{third = FALSE}.}
 }
 \value{
-A matrix
+A matrix.
 }
 \description{
-Creation of Sobol' matrices to compute first, second, third and total-
-order effects.
+It creates the sample matrices to compute Sobol' first and total-order indices.
+If needed, it also creates the sample matrices required to compute second and
+third-order indices. It uses Sobol' quasi-random number sequences.
 }
 \examples{
-sobol_matrices(n = 1000, k = 8, second = TRUE, third = TRUE)
+sobol_matrices(n = 100, k = 8, second = TRUE, third = TRUE)
+}
+\seealso{
+Check the function \code{\link{sobol}} in the package \code{randtoolbox}
+to see how the Sobol' quasi-random number sequences are constructed.
 }
