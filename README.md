@@ -30,3 +30,4 @@ Y <- ishigami_Mapply(A)
 sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
 R = 100, n = 1000, second = TRUE)
 ```
+[![Travis build status](https://travis-ci.org/arnaldpuy/sensobol.svg?branch=master)](https://travis-ci.org/arnaldpuy/sensobol)
