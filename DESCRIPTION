@@ -1,5 +1,5 @@
 Package: sensobol
-Title: Computation of Sobol' sensitivity indices
+Title: sensobol: an R package to swiftly compute and bootstrap Sobol' sensitivity indices
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Arnald",
