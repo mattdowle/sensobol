@@ -2,7 +2,9 @@
 title: "sensobol: an R package to swiftly compute and plot Sobol' sensitivity indices"
 author: "Arnald Puy"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  html_document:
+    keep_md: true
 vignette: >
   %\VignetteIndexEntry{sensobol}
   %\VignetteEngine{knitr::rmarkdown}
