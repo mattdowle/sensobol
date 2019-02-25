@@ -1,3 +1,4 @@
+[![Travis build status](https://travis-ci.org/arnaldpuy/sensobol.svg?branch=master)](https://travis-ci.org/arnaldpuy/sensobol)
 # sensobol
 
 The goal of `sensobol` is to provide a set of functions to swiftly compute and visualize Sobol' sensitivity indices. The functions allow to: 
@@ -30,4 +31,4 @@ Y <- ishigami_Mapply(A)
 sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
 R = 100, n = 1000, second = TRUE)
 ```
-[![Travis build status](https://travis-ci.org/arnaldpuy/sensobol.svg?branch=master)](https://travis-ci.org/arnaldpuy/sensobol)
+
