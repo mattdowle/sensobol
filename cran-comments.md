@@ -19,7 +19,7 @@ The note is as follows:
     * et (11:38, 13:39)
     * indices (10:88, 15:11)
 
-The mispelled words, which I have checked, are actually correct.
+The mispelled words, which I have checked, are correct.
 
 
 
