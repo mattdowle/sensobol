@@ -9,7 +9,7 @@ vignette: >
   %\VignetteIndexEntry{sensobol}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: /Users/arnald/Documents/arnald/bibtex/LATEX_density.bib
+bibliography: /Users/arnald/Documents/R_packages/sensobol/inst/REFERENCES.bib
 ---
 
 ```{r setup, include = FALSE}
