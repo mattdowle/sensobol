@@ -1,7 +1,7 @@
 [![Travis build status](https://travis-ci.org/arnaldpuy/sensobol.svg?branch=master)](https://travis-ci.org/arnaldpuy/sensobol)
 # sensobol
 
-The goal of `sensobol` is to provide a set of functions to swiftly compute and visualize Sobol' sensitivity indices. The functions allow to: 
+The goal of `sensobol` is to provide a set of functions to swiftly compute and visualize up to third-order Sobol' sensitivity indices. The functions allow to: 
 - Create the sample matrices for the model evaluation.
 - Compute and bootstrap up to third-order effects.
 - Assess the approximation error of Sobol' indices.
