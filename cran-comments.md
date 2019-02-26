@@ -10,14 +10,14 @@
 The note is as follows:
 
 * Possibly mis-spelled words in DESCRIPTION:
-  Indices (2:48)
-  Khorashadi (13:22)
-  Saltelli (11:29)
-  Sobol (2:29, 10:81, 14:61)
-  Zadeh (13:33)
-  al (11:41, 13:42)
-  et (11:38, 13:39)
-  indices (10:88, 15:11)
+  ** Indices (2:48)
+  ** Khorashadi (13:22)
+  ** Saltelli (11:29)
+  ** Sobol (2:29, 10:81, 14:61)
+  ** Zadeh (13:33)
+  ** al (11:41, 13:42)
+  ** et (11:38, 13:39)
+  ** indices (10:88, 15:11)
 
 The mispelled words, which I have checked, are actually correct.
 

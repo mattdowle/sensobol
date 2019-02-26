@@ -22,13 +22,18 @@ This brief example shows how to compute Sobol' indices. For a more detailed expl
 
 ``` r
 ## Create sample matrix
-A <- sobol_matrices(n = 1000, k = 3, second = TRUE)
+A <- sobol_matrices(n = 1000, 
+k = 3, 
+second = TRUE)
 
 ## Compute the model output (using the Ishigami test function):
 Y <- ishigami_Mapply(A)
 
 ## Compute the Sobol' indices:
-sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
-R = 100, n = 1000, second = TRUE)
+sens <- sobol_indices(Y = Y, 
+params = colnames(data.frame(A)),
+R = 100, 
+n = 1000, 
+second = TRUE)
 ```
 
