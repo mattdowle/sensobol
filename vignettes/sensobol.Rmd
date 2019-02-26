@@ -1,5 +1,5 @@
 ---
-title: "sensobol: an R package to swiftly compute and plot Sobol' sensitivity indices"
+title: "sensobol: Computation of Sobol' Indices"
 author: "Arnald Puy"
 date: "`r Sys.Date()`"
 output: 
@@ -9,7 +9,7 @@ vignette: >
   %\VignetteIndexEntry{sensobol}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: /Users/arnald/Documents/R_packages/sensobol/inst/REFERENCES.bib
+bibliography: REFERENCES.bib
 ---
 
 ```{r setup, include = FALSE}
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-The `sensobol` package relies on `data.table` and parallel functions in the `boot` package to rapidly compute and bootstrap first, total, and if desired, second and third-order sensitivity indices. It currently uses two estimators: the @Jansen1999 (default) and the @Saltelli2010a.
+The `sensobol` package relies on `data.table` and parallel functions in the `boot` and `parallel package to rapidly compute and bootstrap first, total, and if desired, second and third-order sensitivity indices. It currently uses two estimators: the @Jansen1999 (default) and the @Saltelli2010a.
 
 ## Creation of the sample matrix
 

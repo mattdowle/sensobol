@@ -46,14 +46,14 @@ estimator.
 }
 \examples{
 # Define settings:
-n <- 100; k <- 8; R <- 10
+n <- 1000; k <- 8; R <- 100
 # Design the sample matrix:
 A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
 # Compute the model output:
 Y <- sobol_Fun(A)
 # Compute the Sobol' indices:
-sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
-R = R, n = n, parallel = "no", ncpus = 1, second = TRUE, third = TRUE)
+\donttest{sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
+R = R, n = n, parallel = "no", ncpus = 1, second = TRUE, third = TRUE)}
 }
 \references{
 \insertAllCited{}

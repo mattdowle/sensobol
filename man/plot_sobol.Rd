@@ -25,13 +25,13 @@ Plot Sobol' first and total-order indices
 }
 \examples{
 # Define settings:
-n <- 100; k <- 8; R <- 10
+n <- 500; k <- 8; R <- 100
 # Design the sample matrix:
 A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
 # Compute the model output:
 Y <- sobol_Fun(A)
 # Compute the Sobol' indices:
-sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
+\donttest{sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
 R = R, n = n, parallel = "no", ncpus = 1, second = TRUE, third = TRUE)
 # Compute the Sobol' indices for the dummy parameter:
 s.dummy <- sobol_dummy(Y = Y, params = colnames(data.frame(A)), R = R, n = n)
@@ -40,5 +40,5 @@ sens.ci <- sobol_ci(sens, params = colnames(data.frame(A)), type = "norm", conf 
 # Compute confidence intervals for the dummy parameter:
 s.dummy.ci <- sobol_ci_dummy(s.dummy, type = "norm", conf = 0.95)
 # Plot Sobol' indices:
-plot_sobol(sens.ci, dummy = s.dummy.ci, type = 1)
+plot_sobol(sens.ci, dummy = s.dummy.ci, type = 1)}
 }

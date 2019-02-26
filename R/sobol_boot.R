@@ -177,17 +177,17 @@ create_vectors <- function(params, second = FALSE, third = FALSE) {
 #'
 #' @examples
 #' # Define settings:
-#' n <- 100; k <- 8; R <- 10
+#' n <- 1000; k <- 8; R <- 100
 #' # Design the sample matrix:
 #' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
 #' # Compute the model output:
 #' Y <- sobol_Fun(A)
 #' # Compute the Sobol' indices:
-#' sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
+#' \donttest{sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
 #' R = R, n = n, parallel = "no", ncpus = 1,
 #' second = TRUE, third = TRUE)
 #' # Compute confidence intervals:
-#' sobol_ci(sens, params = colnames(data.frame(A)), type = "norm", conf = 0.95)
+#' sobol_ci(sens, params = colnames(data.frame(A)), type = "norm", conf = 0.95)}
 sobol_ci <- function(b, params, type, conf, second = FALSE, third = FALSE) {
   out <- sobol_ci_temp(b = b, params = params, type = type,
                         conf = conf, second = second, third = third) %>%

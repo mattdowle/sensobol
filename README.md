@@ -18,7 +18,7 @@ devtools::install_github("arnaldpuy/sensobol", build_vignettes = TRUE)
 
 ## Example
 
-This brief example shows how to compute Sobol' indices. For a more detailed explanation of the package functions, check the vignette.
+This brief example shows how to compute Sobol' indices. For a more detailed explanation of the package functions, check the [vignette](https://github.com/arnaldpuy/sensobol/blob/master/vignettes/sensobol.Rmd).
 
 ``` r
 ## Create sample matrix

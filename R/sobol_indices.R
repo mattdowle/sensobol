@@ -33,10 +33,11 @@ sobol_computeJ <- function(Y_A, Y_B, Y_AB) {
 #'
 #' @return The first and total Sobol' indices.
 sobol_MapplyJ <- function(d, i) {
+  data <- d[i, ]
   return(mapply(sobol_computeJ,
-                d[i, "Y_A"],
-                d[i, "Y_B"],
-                d[i, "Y_AB"]))
+                data[, "Y_A"],
+                data[, "Y_B"],
+                data[, "Y_AB"]))
 }
 
 # FUNCTION TO COMPUTE SOBOL' SECOND-ORDER EFFECTS USING
@@ -81,12 +82,13 @@ sobol_compute_secondJ <- function(Y_A, Y_B, Y_ABi,
 #'
 #' @return The second-order indices.
 sobol_second_MapplyJ <- function(d, i) {
+  data <- d[i, ]
   return(mapply(sobol_compute_secondJ,
-                d[i, "Y_A"],
-                d[i, "Y_B"],
-                d[i, "Y_ABi"],
-                d[i, "Y_ABj"],
-                d[i, "Y_ABij"]))
+                data[, "Y_A"],
+                data[, "Y_B"],
+                data[, "Y_ABi"],
+                data[, "Y_ABj"],
+                data[, "Y_ABij"]))
 }
 
 # FUNCTION TO COMPUTE SOBOL' THIRD-ORDER EFFECTS USING
@@ -150,16 +152,17 @@ sobol_compute_thirdJ <- function(Y_A, Y_B, Y_ABi,
 #'
 #' @return The third-order indices.
 sobol_third_MapplyJ <- function(d, i) {
+  data <- d[i, ]
   return(mapply(sobol_compute_thirdJ,
-                d[i, "Y_A"],
-                d[i, "Y_B"],
-                d[i, "Y_ABi"],
-                d[i, "Y_ABj"],
-                d[i, "Y_ABk"],
-                d[i, "Y_ABij"],
-                d[i, "Y_ABik"],
-                d[i, "Y_ABjk"],
-                d[i, "Y_ABijk"]))
+                data[, "Y_A"],
+                data[, "Y_B"],
+                data[, "Y_ABi"],
+                data[, "Y_ABj"],
+                data[, "Y_ABk"],
+                data[, "Y_ABij"],
+                data[, "Y_ABik"],
+                data[, "Y_ABjk"],
+                data[, "Y_ABijk"]))
 }
 
 # FUNCTION TO COMPUTE SOBOL' FIRST AND TOTAL-ORDER EFFECTS USING
@@ -197,11 +200,13 @@ sobol_computeS <- function(Y_A, Y_B, Y_AB) {
 #' @param i Indices to allow bootstrap.
 #'
 #' @return The first and total Sobol' indices.
-sobol_MapplyS <- function(d, i)
+sobol_MapplyS <- function(d, i) {
+  data <- d[i, ]
   return(mapply(sobol_computeS,
-                d[i, "Y_A"],
-                d[i, "Y_B"],
-                d[i, "Y_AB"]))
+                data[, "Y_A"],
+                data[, "Y_B"],
+                data[, "Y_AB"]))
+}
 
 # FUNCTION TO COMPUTE SOBOL' SECOND-ORDER EFFECTS USING
 # THE SALTELLI ET AL. 2010 ESTIMATOR ------------------------------------------
@@ -244,13 +249,15 @@ sobol_compute_secondS <- function(Y_A, Y_B, Y_ABi,
 #' @param i Indices to allow bootstrap.
 #'
 #' @return The second-order indices.
-sobol_second_MapplyS <- function(d, i)
+sobol_second_MapplyS <- function(d, i) {
+  data <- d[i, ]
   return(mapply(sobol_compute_secondS,
-                d[i, "Y_A"],
-                d[i, "Y_B"],
-                d[i, "Y_ABi"],
-                d[i, "Y_ABj"],
-                d[i, "Y_ABij"]))
+                data[, "Y_A"],
+                data[, "Y_B"],
+                data[, "Y_ABi"],
+                data[, "Y_ABj"],
+                data[, "Y_ABij"]))
+}
 
 # FUNCTION TO COMPUTE SOBOL' THIRD-ORDER EFFECTS USING
 # THE SALTELLI ET AL. 2010 ESTIMATOR ------------------------------------------
@@ -312,17 +319,19 @@ sobol_compute_thirdS <- function(Y_A, Y_B, Y_ABi,
 #' @return The third-order indices.
 # Wrap-up the Sobol' function for second order
 # indices and allow bootstrap
-sobol_third_MapplyS <- function(d, i)
+sobol_third_MapplyS <- function(d, i) {
+  data <- d[i, ]
   return(mapply(sobol_compute_thirdS,
-                d[i, "Y_A"],
-                d[i, "Y_B"],
-                d[i, "Y_ABi"],
-                d[i, "Y_ABj"],
-                d[i, "Y_ABk"],
-                d[i, "Y_ABij"],
-                d[i, "Y_ABik"],
-                d[i, "Y_ABjk"],
-                d[i, "Y_ABijk"]))
+                data[, "Y_A"],
+                data[, "Y_B"],
+                data[, "Y_ABi"],
+                data[, "Y_ABj"],
+                data[, "Y_ABk"],
+                data[, "Y_ABij"],
+                data[, "Y_ABik"],
+                data[, "Y_ABjk"],
+                data[, "Y_ABijk"]))
+}
 
 # FUNCTION TO COMPUTE SOBOL' INDICES FOR A DUMMY PARAMETER --------------------
 
@@ -352,13 +361,12 @@ sobol_dummyT <- function(Y_A, Y_B, Y_AB) {
 #'
 #' @return The first and total Sobol' indices for a dummy parameter.
 sobol_dummy_Mapply <- function(d, i) {
+  data <- d[i, ]
   return(mapply(sobol_dummyT,
-                d[i, "Y_A"],
-                d[i, "Y_B"],
-                d[i, "Y_AB"]))
+                data[, "Y_A"],
+                data[, "Y_B"],
+                data[, "Y_AB"]))
 }
-
-
 
 #' Computation of Sobol' indices for a dummy parameter
 #'
@@ -468,14 +476,14 @@ sobol_dummy <- function(Y, params, R, n,
 #' @export
 #' @examples
 #' # Define settings:
-#' n <- 100; k <- 8; R <- 10
+#' n <- 1000; k <- 8; R <- 100
 #' # Design the sample matrix:
 #' A <- sobol_matrices(n = n, k = k, second = TRUE, third = TRUE)
 #' # Compute the model output:
 #' Y <- sobol_Fun(A)
 #' # Compute the Sobol' indices:
-#' sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
-#' R = R, n = n, parallel = "no", ncpus = 1, second = TRUE, third = TRUE)
+#' \donttest{sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)),
+#' R = R, n = n, parallel = "no", ncpus = 1, second = TRUE, third = TRUE)}
 sobol_indices <- function(Y, params, type = "jansen",
                           R, n, parallel = "no", ncpus = 1,
                           second = FALSE, third = FALSE) {
