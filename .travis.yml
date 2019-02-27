@@ -21,7 +21,3 @@ notifications:
   email:
     on_success: change
     on_failure: change
-
-environment:
-  global:
-    WARNINGS_ARE_ERRORS: 1
