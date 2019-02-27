@@ -5,7 +5,7 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 2 notes
 
 ### Notes
 
@@ -20,7 +20,5 @@
     * indices (10:88, 15:11)
 
 The mispelled words, which I have checked, are correct.
-
-
 
 * This is a new release.

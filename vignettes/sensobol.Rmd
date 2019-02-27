@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-The `sensobol` package relies on `data.table` and parallel functions in the `boot` and `parallel package to rapidly compute and bootstrap first, total, and if desired, second and third-order sensitivity indices. It currently uses two estimators: the @Jansen1999 (default) and the @Saltelli2010a.
+The `sensobol` package relies on `data.table` and parallel functions in the `boot` and `parallel` package to rapidly compute and bootstrap first, total, and if desired, second and third-order sensitivity indices. It currently uses two estimators: the @Jansen1999 (default) and the @Saltelli2010a estimator.
 
 ## Creation of the sample matrix
 
@@ -70,7 +70,7 @@ plot_scatter(x = A,
              params = params)
 ```
 
-We then compute and bootstrap Sobol' indices. Since we have designed a sample matrix that allows to compute up to third-order effects, we will go for first, second, third and total sensitivity indices here. As stated in the introduction of the vignette, the package currently offers two estimators: the one by @Jansen1999 (default) and the one by @Saltelli2010a. The `sobol_indices` function also allows for parallel computing to speed up the bootstrapping. For more information on how to use the parallel and ncpus parameters, check the `boot` function of the `boot` package.
+We then compute and bootstrap Sobol' indices. Since we have designed a sample matrix that allows to compute up to third-order effects, we will go for first, second, third and total sensitivity indices here. As stated in the introduction of the vignette, the package currently offers two estimators: the one by @Jansen1999 (default) and the one by @Saltelli2010a. The `sobol_indices` function also allows for parallel computing to speed up the bootstrapping. For more information on how to use the `parallel` and `ncpus` parameters, check the `boot` function of the `boot` package.
 
 ```{r compute_sobol}
 
@@ -87,7 +87,7 @@ dt <- sobol_indices(Y = Y,
                     third = TRUE)
 ```
 
-The output of `sobol_indices` is a `data.table` with two columns: firstly, the column `parameters`, which indicates whether the Sobol' indices have been calculated for single model inputs, for pairs of model inputs (second-order) or for three model inputs (third-order). Secondly, the column `V1`, which stores an object of class `boot` with all the results of the bootstrap. In the column `V1`, for instance, we could access the bootstrap replicas. This is useful if we want to assess their distribution in order to select the most appropriate method for the computation of confidence intervals:
+The output of `sobol_indices` is a `data.table` with two columns: firstly, the column `parameters`, which indicates whether the Sobol' indices have been calculated for single model inputs, for pairs of model inputs (second-order) or for three model inputs (third-order). Secondly, the column `V1`, which stores an object of class `boot` with all the results of the bootstrap. Column `V1`, for instance, stores the bootstrap replicas. This is useful if we want to assess their distribution in order to select the most appropriate method for the computation of confidence intervals:
 
 ```{r print_output}
 
@@ -138,7 +138,7 @@ dt.ci <- sobol_ci(dt,
 
 ### Calculation of the approximation error
 
-Due to measurement error, it is likely that model inputs that are not influential display sensitivity indices that are not zero. In order to assess the extent of this measurement error, we can calculate the Sobol' indices of a dummy parameter. This will allow to differentiate truly influential model inputs from those whose non-zero indices might simply result from the noise of the calculation. The `sensobol` package implements the approach by @KhorashadiZadeh2017 to calculate and bootstrap the Sobol' indices of a dummy parameter:
+Due to measurement error, it is likely that model inputs that are not influential display sensitivity indices that are not zero. In order to assess the extent of this measurement error, we can calculate the Sobol' indices of a dummy parameter. This allows to differentiate truly influential model inputs from those whose non-zero indices might simply result from the noise of the calculation. The `sensobol` package implements the approach by @KhorashadiZadeh2017 to calculate and bootstrap the Sobol' indices of a dummy parameter:
 
 ```{r sobol_dummy}
 
