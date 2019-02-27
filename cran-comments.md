@@ -7,7 +7,7 @@
 
 0 errors | 0 warnings | 1 note
 
-The note is as follows:
+### Notes
 
 * Possibly mis-spelled words in DESCRIPTION:
     * Indices (2:48)
