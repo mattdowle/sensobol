@@ -1,8 +1,7 @@
 Package: sensobol
 Title: Swift Computation of Sobol' Sensitivity Indices
 Version: 0.1.0
-Authors@R: 
-    person(given = "Arnald",
+Authors@R: person(given = "Arnald",
            family = "Puy",
            role = c("aut", "cre"),
            email = "arnald.puy@gmail.com", 
