@@ -21,7 +21,7 @@ Description: It allows to rapidly compute, bootstrap and plot up to third-order 
     the algorithm by Khorashadi Zadeh et al. 2017 <doi:10.1016/j.envsoft.2017.02.001 > to 
     calculate the approximation error in the computation of Sobol' first and
     total indices, an approach that allows to robustly screen influential from non-influential
-    model inputs. Finally, it also provides functions to obtain publication-quality figures
+    model inputs. Finally, it also provides functions to obtain publication-ready figures
     of the model output uncertainty and sensitivity-related analysis.
 License: GPL-3
 Encoding: UTF-8
