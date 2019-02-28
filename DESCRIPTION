@@ -1,11 +1,11 @@
 Package: sensobol
-Title: Swift Computation of Sobol' Sensitivity Indices
+Title: Computation of High-Order Sobol' Sensitivity Indices
 Version: 0.1.0
 Authors@R: c(person(given = "Arnald", 
                     family = "Puy",
                     role = c("aut", "cre"),
                     email = "arnald.puy@gmail.com", 
-                    comment = c(ORCID = "0000-0001-9469-2156")), 
+                    comment = c(ORCID = "https://orcid.org/0000-0001-9469-2156")), 
             person("Bertrand", "Ioos", 
                     role = "ctb", 
                     comment = "Author of included 'sensitivity' fragments"), 
