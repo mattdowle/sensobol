@@ -1,5 +1,4 @@
-^NEWS\.md$
-^codecov\.yml$
+1^codecov\.yml$
 ^appveyor\.yml$
 ^cran-comments\.md$
 ^\.travis\.yml$
