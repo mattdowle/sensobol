@@ -81,8 +81,6 @@ dt <- sobol_indices(Y = Y,
                     type = "saltelli", 
                     R = R,
                     n = N, 
-                    parallel = "multicore", 
-                    ncpus = parallel::detectCores() - 2, 
                     second = TRUE, 
                     third = TRUE)
 ```
