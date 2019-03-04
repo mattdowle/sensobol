@@ -113,8 +113,7 @@ sobol_matrices <- function(n, k, second = FALSE, third = FALSE) {
     AB <- rbind(AB, AB.2)
   }
   if(second == FALSE & third == TRUE) {
-    stop("The computation of third-order Sobol' indices
-         requires the computation of second-order indices first")
+    stop("The computation of third-order Sobol' indices requires the computation of second-order indices first")
   }
   if(second == TRUE & third == TRUE) {
     AB.2 <- scrambled_second(A = A, B = B)

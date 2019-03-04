@@ -1,8 +1,5 @@
 context("test-sobol_matrices")
 
-library(sensobol)
-library(testthat)
-
 N <- 100; k <- 3
 
 test_that("Output is a matrix", {
@@ -30,7 +27,6 @@ test_that("Sample size for first, total, second and third-order indices", {
 })
 
 test_that("Error when second = FALSE and third = TRUE", {
-  A <- sobol_matrices(N, k, second = FALSE, third = TRUE)
-  expect_error(A, "The computation of third-order Sobol' indices
-               requires the computation of second-order indices first")
+  expect_error(sobol_matrices(N, k, second = FALSE, third = TRUE),
+               "The computation of third-order Sobol' indices requires the computation of second-order indices first")
 })
