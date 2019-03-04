@@ -488,8 +488,7 @@ sobol_indices <- function(Y, params, type = "jansen",
                           R, n, parallel = "no", ncpus = 1,
                           second = FALSE, third = FALSE) {
   if(second == FALSE & third == TRUE) {
-    stop("The computation of third-order indices requires second == TRUE as it computes
-         second-order indices first")
+    stop("The computation of third-order indices requires second = TRUE as it computes second-order indices first")
   }
   # Calculate the number of parameters
   k <- length(params)
