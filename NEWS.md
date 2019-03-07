@@ -1,4 +1,4 @@
-# sensobol 0.1.1
+# sensobol 0.1.9000
 
 * Corrected the following note, found in the CRAN check: 
   - Namespace in Imports field not imported from: ‘parallel’.
