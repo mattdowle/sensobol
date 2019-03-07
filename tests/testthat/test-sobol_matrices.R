@@ -1,4 +1,5 @@
 context("test-sobol_matrices")
+library(testthat)
 
 N <- 100; k <- 3
 
