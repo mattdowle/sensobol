@@ -2,16 +2,6 @@
 # INTERNAL FUNCTION TO CREATE THE SCRAMBLED MATRIX FOR THE
 # COMPUTATION OF FIRST-ORDER SOBOL' INDICES -----------------------------------
 
-#' Creation of Sobol' matrices for the computation of
-#' first and total order effects. It is an internal function of
-#' "sobol_matrices".
-#'
-#' @param A The first k Sobol' matrix.
-#' @param B The second k Sobol' matrix.
-#'
-#' @return A matrix.
-#' @export
-
 scrambled_sobol <- function(A, B) {
   X <- rbind(A, B)
   for(i in 1:ncol(A)) {
@@ -25,15 +15,6 @@ scrambled_sobol <- function(A, B) {
 
 # INTERNAL FUNCTION TO CREATE THE SCRAMBLED MATRIX FOR THE
 # COMPUTATION OF SECOND-ORDER SOBOL' INDICES ----------------------------------
-
-#' Creation of Sobol' matrix for the computation of third-order effects. It is
-#' an internal function of "sobol_matrices".
-#'
-#' @param A First k Sobol' matrix.
-#' @param B Second k Sobol' matrix.
-#'
-#' @return A matrix
-#' @export
 
 scrambled_second <- function(A, B) {
   X <- rbind(A, B)
@@ -51,15 +32,6 @@ scrambled_second <- function(A, B) {
 # INTERNAL FUNCTION TO CREATE THE SCRAMBLED MATRIX FOR THE
 # COMPUTATION OF THIRD-ORDER SOBOL' INDICES ----------------------------------
 
-#' Creation of Sobol' matrix for the computation of third-order effects. It is
-#' an internal function of "sobol_matrices".
-#'
-#' @param A First k Sobol' matrix.
-#' @param B Second k Sobol' matrix.
-#'
-#' @return A matrix
-#' @export
-#'
 scrambled_third <- function(A, B) {
   X <- rbind(A, B)
   parms <- utils::combn(1:ncol(A), 3, simplify = FALSE)

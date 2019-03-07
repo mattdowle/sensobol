@@ -9,8 +9,12 @@ The goal of `sensobol` is to provide a set of functions to swiftly compute and v
 - Plot the model uncertainty and the Sobol' indices.
 
 ## Installation
+To install the stable version on CRAN, use
 
-You can install the released version of sensobol as follows:
+```r
+install.packages("sensobol")
+```
+To install the development version, use devtools:
 
 ``` r
 install.packages("devtools") # if you have not installed devtools package already
