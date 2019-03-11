@@ -29,7 +29,7 @@ third-order indices. It uses Sobol' quasi-random number sequences.
 The function generates an \eqn{(n, 2k)} matrix using Sobol' quasi-random
 number sequences. The first \emph{k}-matrix is the \strong{A} matrix and the
 remaining \emph{k}-matrix, the \strong{B} matrix. It then generates \emph{k}
-additional matrices {(\strong{A}^j_{\strong{B}})}_i, \eqn{j=1,2,...,k}, where
+additional matrices {(\strong{A}^j_{\strong{B}})}, \eqn{j=1,2,...,k}, where
 the \emph{k} matrix is composed of all columns of the \strong{A} matrix
 except the \emph{j}-th column, which is the \emph{j} column of the
 \strong{B} matrix. This approach leds to a total number of model runs of
