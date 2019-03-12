@@ -1,4 +1,7 @@
-# sensobol 0.1.9000
+# sensobol 0.1.1
+
+* The vignette rendered wrongly in the previous version;
+now the issue is corrected.
 
 * Corrected the following note, found in the CRAN check: 
   - Namespace in Imports field not imported from: ‘parallel’.

@@ -1,6 +1,6 @@
 Package: sensobol
 Title: Computation of High-Order Sobol' Sensitivity Indices
-Version: 0.1.9000
+Version: 0.1.1
 Authors@R: c(person(given = "Arnald", 
                     family = "Puy",
                     role = c("aut", "cre"),

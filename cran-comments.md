@@ -2,7 +2,8 @@
 
 This is a small patch release fixing bugs discovered in the previous release (0.1.0).
 
-It also fixes the check errors on CRAN.
+It also fixes the following check errors on CRAN:
+  - Namespace in Imports field not imported from: ‘parallel’.
 
 ## Test environments
 * local OS X install, R 3.5.2
