@@ -45,7 +45,7 @@ Please use the following citation if you use `sensobol` in your publications:
 
 ```r
 Arnald Puy (2019). sensobol: Computation of High-Order Sobol' Sensitivity Indices. R package
-  version 0.1.0. http://github.com/arnaldpuy/sensobol
+  version 0.1.1. http://github.com/arnaldpuy/sensobol
 ```
 
 A BibTex entry for LaTex users is:
@@ -55,7 +55,7 @@ A BibTex entry for LaTex users is:
     title = {sensobol: Computation of High-Order Sobol' Sensitivity Indices},
     author = {Arnald Puy},
     year = {2019},
-    note = {R package version 0.1.0},
+    note = {R package version 0.1.1},
     url = {http://github.com/arnaldpuy/sensobol},
   }
 ```

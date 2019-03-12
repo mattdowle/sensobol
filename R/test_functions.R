@@ -22,14 +22,6 @@ sobol_Fun <- function(X) {
 
 # Ishigami function -----------------------------------------------------------
 
-#' Ishigami function
-#'
-#' @param X1 First model input.
-#' @param X2 Second model input.
-#' @param X3 Third model input.
-#'
-#' @return A numeric vector with the model output.
-
 ishigami <- function(X1, X2, X3) {
   A <- 2
   B <- 1
