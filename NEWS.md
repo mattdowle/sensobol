@@ -1,3 +1,7 @@
+# sensobol 0.1.2
+
+* New test function added [(Bradley et al. 1992)](https://dl.acm.org/citation.cfm?id=146385)
+
 # sensobol 0.1.1
 
 * The vignette rendered wrongly in the previous version;

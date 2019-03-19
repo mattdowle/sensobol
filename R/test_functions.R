@@ -45,3 +45,39 @@ ishigami_Mapply <- function(X) {
                 X[, 2],
                 X[, 3]))
 }
+
+# Bradley et al. function -----------------------------------------------------
+
+
+#' Bratley et al. (1992) function
+#'
+#' It implements the \insertCite{Bratley1992;textual}{sensobol} function.
+#'
+#' @param X A data frame or numeric matrix.
+#'
+#' @return A numeric vector with the model output.
+#' @export
+#' @references
+#' \insertAllCited{}
+#'
+#' @examples
+#' A <- sobol_matrices(n = 100, k = 4)
+#' Y <- bratley_Fun(A)
+bratley_Fun <- function(X) {
+  # Preallocate
+  xxmat <- xxmatlow <- tmp <- vector(mode = "list",
+                                     length = nrow(X))
+  Y <- vector(mode = "numeric",
+              length = nrow(X))
+  for(i in 1:nrow(X)) {
+    xxmat[[i]] <- matrix(rep(X[i, ], times = ncol(X)),
+                         nrow = ncol(X),
+                         ncol = ncol(X),
+                         byrow = TRUE)
+    xxmatlow[[i]] <- xxmat[[i]]
+    xxmatlow[[i]][upper.tri(xxmat[[i]])] <- 1
+    tmp[[i]] <- matrixStats::rowProds(xxmatlow[[i]])
+    Y[[i]] <- sum(tmp[[i]] * (-1) ^ (1:ncol(X)))
+  }
+  return(Y)
+}
