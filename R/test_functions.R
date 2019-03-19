@@ -74,9 +74,8 @@ bratley_Fun <- function(X) {
                          nrow = ncol(X),
                          ncol = ncol(X),
                          byrow = TRUE)
-    xxmatlow[[i]] <- xxmat[[i]]
-    xxmatlow[[i]][upper.tri(xxmat[[i]])] <- 1
-    tmp[[i]] <- matrixStats::rowProds(xxmatlow[[i]])
+    xxmat[[i]][upper.tri(xxmat[[i]])] <- 1
+    tmp[[i]] <- matrixStats::rowProds(xxmat[[i]])
     Y[[i]] <- sum(tmp[[i]] * (-1) ^ (1:ncol(X)))
   }
   return(Y)
