@@ -1,6 +1,9 @@
-# sensobol 0.1.2
+# sensobol 0.1.2.9000
 
-* New test function added [(Bradley et al. 1992)](https://dl.acm.org/citation.cfm?id=146385)
+* New test functions added: 
+  - [Bratley & Fox 1988](https://dl.acm.org/citation.cfm?id=214372&dl=ACM&coll=DL)
+  - [Bratley et al. 1992](https://dl.acm.org/citation.cfm?id=146385).
+  - [Oakley & O'Hagan 2004] (http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.470.6932&rep=rep1&type=pdf)
 
 # sensobol 0.1.1
 
