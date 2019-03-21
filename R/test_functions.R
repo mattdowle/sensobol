@@ -3,11 +3,16 @@
 
 #' Sobol' G function
 #'
-#' @param X A data frame or matrix.
+#' It implements the \insertCite{Sobol1998;textual}{sensobol} function. In this
+#' case, the function works with 8 model inputs.
+#'
+#' @param X A data frame or numeric matrix.
 #'
 #' @return A numeric vector with the model output.
 #' @export
 #'
+#' @references
+#' \insertAllCited{}
 #' @examples
 #' A <- sobol_matrices(n = 100, k = 8)
 #' Y <- sobol_Fun(A)
@@ -30,16 +35,24 @@ ishigami <- function(X1, X2, X3) {
 
 #' Ishigami function
 #'
-#' @param X A data frame, data table or matrix with the three model inputs
-#' required to run the Ishigami function.
+#' It implements the \insertCite{Ishigami1990;textual}{sensobol} function,
+#' which requires 3 model inputs. The transformation of the
+#' distribution of the model inputs (from U(0, 1) to U(-pi, +pi)) is conducted
+#' internally.
+#'
+#' @param X A data frame or numeric matrix.
 #'
 #' @return A numeric vector with the model output.
 #' @export
+#'
+#' @references
+#' \insertAllCited{}
 #'
 #' @examples
 #' A <- sobol_matrices(n = 100, k = 3)
 #' Y <- ishigami_Mapply(A)
 ishigami_Mapply <- function(X) {
+  X <- apply(X, 2, function(x) x * (pi + pi) - pi)
   return(mapply(ishigami,
                 X[, 1],
                 X[, 2],
@@ -51,7 +64,8 @@ ishigami_Mapply <- function(X) {
 
 #' Bratley, Fox and Niederreiter (1992) function
 #'
-#' It implements the \insertCite{Bratley1992;textual}{sensobol} function.
+#' It implements the \insertCite{Bratley1992;textual}{sensobol} function,
+#' #' which requires \emph{n} model inputs.
 #'
 #' @param X A data frame or numeric matrix.
 #'

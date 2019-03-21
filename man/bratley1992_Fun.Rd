@@ -13,7 +13,8 @@ bratley1992_Fun(X)
 A numeric vector with the model output.
 }
 \description{
-It implements the \insertCite{Bratley1992;textual}{sensobol} function.
+It implements the \insertCite{Bratley1992;textual}{sensobol} function,
+#' which requires \emph{n} model inputs.
 }
 \examples{
 A <- sobol_matrices(n = 100, k = 4)
