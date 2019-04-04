@@ -1,5 +1,6 @@
-# sensobol 0.1.2.9000
+# sensobol 0.1.2
 
+* New option in the `sobol_matrices` function: the option `cluster` allows to create Sobol' matrices for clusters of parameters.
 * New test functions added: 
   - [Bratley & Fox 1988](https://dl.acm.org/citation.cfm?id=214372&dl=ACM&coll=DL)
   - [Bratley et al. 1992](https://dl.acm.org/citation.cfm?id=146385)
