@@ -42,7 +42,7 @@ sens <- sobol_indices(Y = Y, params = colnames(data.frame(A)), R = 100, n = 1000
 ## Citation
 
 Please use the following citation if you use `sensobol` in your publications:
-rele
+
 ```r
 Arnald Puy (2019). sensobol: Computation of High-Order Sobol' Sensitivity Indices. R package
   version 0.2.0 http://github.com/arnaldpuy/sensobol
