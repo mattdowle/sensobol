@@ -17,8 +17,8 @@ matrix required to compute second-order indices. Default is \code{second = FALSE
 \item{third}{Logical. If \code{third = TRUE}, it creates the scrambled
 matrix required to compute third-order indices. Default is \code{third = FALSE}.}
 
-\item{cluster}{List of vectors, each vector including the column number or the
-column name of the parameters forming the cluster. The default is \code{cluster = NULL}}
+\item{cluster}{List of vectors, each vector including the column number
+of the parameters forming the cluster. The default is \code{cluster = NULL}}
 }
 \value{
 A matrix.
