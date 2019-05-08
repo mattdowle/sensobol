@@ -1,3 +1,8 @@
+# sensobol 0.2.1
+
+* Corrected a bug in the `plot_uncertainty` function. Now the function
+demands to add the initial sample size `n` to visualize the model output uncertainty.
+
 # sensobol 0.2.0
 
 * New option in the `sobol_matrices` function: the option `cluster` allows to create Sobol' matrices for clusters of parameters.
