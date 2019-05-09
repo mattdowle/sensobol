@@ -3,6 +3,8 @@
 * Corrected a bug in the `plot_uncertainty` function. Now the function
 demands to add the initial sample size `n` to visualize the model output uncertainty.
 
+* Added a new function (`sobol_replicas`) to easily extract the bootstrapped Sobol' indices.
+
 # sensobol 0.2.0
 
 * New option in the `sobol_matrices` function: the option `cluster` allows to create Sobol' matrices for clusters of parameters.
