@@ -59,7 +59,7 @@ sobol_replicas <- function(dt, k, second = FALSE, third = FALSE) {
       , "replicas":= list(lapply(V1, function(x) x["t"]))][
       , list("Sijk" = lapply(replicas, function(x) lapply(x, function(y) y[, 1]))), parameters][
       , lapply(.SD, unlist), .SDcols = "Sijk", parameters]
-    third <- data.table::melt(third, measure.vars = "Sijk")
+    third <- data.table::melt(third, measure.vars = "Sijk", variable.name = "sensitivity")
     out <- rbind(first.and.total, second, third)
   }
   return(out)
