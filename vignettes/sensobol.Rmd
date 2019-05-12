@@ -95,22 +95,14 @@ The output of `sobol_indices` is a `data.table` with two columns: firstly, the c
 print(dt)
 ```
 
-We can access and check the bootstrap replicas of the first and total-order indices as follows:
+We can access the bootstrap replicas with the `sobol_replicas` function. Here we will only access the replicas of the first and total-order indices:
 
-```{r boot_replicas, fig.height=6.5, fig.width=6.5, fig.cap="Distribution of the bootstrap replicas."}
+```{r boot_replicas, fig.height=6.5, fig.width=6.5, fig.cap="Distribution of the bootstrap replicas. For better-shaped histograms, increase the sample size R."}
 
 # Access boot replicas ------------------------------------
 
-# Select only first and total-order indices
-temp <- dt[1:k]
-
 # Extract boot samples
-b.rep <- temp[, "All":= list(lapply(V1, function(x) x["t"]))] %>%
-  .[, .("Si" = lapply(All, function(x) lapply(x, function(y) y[, 1])), 
-         "STi" = lapply(All, function(x) lapply(x, function(y) y[, 2]))), 
-     parameters] %>%
-  .[, lapply(.SD, unlist), .SDcols = c("Si", "STi"), parameters] %>%
-  data.table::melt(., measure.vars = c("Si", "STi"))
+b.rep <- sobol_replicas(dt = dt, k = k)
 
 # Plot
 ggplot2::ggplot(b.rep, aes(value)) +
